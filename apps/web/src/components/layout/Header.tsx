@@ -4,16 +4,16 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { styleFoundation } from '@/lib/flags';
 
-const navItems = [
-  { href: '/', label: 'Dashboard' },
-  { href: '/vendors', label: 'Vendors' },
-  { href: '/profile', label: 'Profile' }
-];
-
 export default function Header() {
   const pathname = usePathname();
   const isStyleFoundation = styleFoundation();
 
+  // Navigation items: Dashboard, Vendors, Profile
+  const navItems = [
+    { href: '/', label: 'Dashboard' },
+    { href: '/vendors', label: 'Vendors' },
+    { href: '/profile', label: 'Profile' }
+  ];
   const isActive = (href: string) => {
     if (href === '/') {
       return pathname === '/';
@@ -22,47 +22,60 @@ export default function Header() {
   };
 
   return (
-    <header className={`border-b ${
-      isStyleFoundation ? 'border-white/10' : 'border-zinc-800'
-    }`} style={!isStyleFoundation ? { backgroundColor: 'var(--background-surface)' } : {}}>
-      <div className="max-w-[1320px] mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <div className={`text-xl font-bold ${
-              isStyleFoundation ? 'text-text-1' : 'text-white'
+    <nav 
+      className={`sticky top-0 z-50 ${
+        isStyleFoundation 
+          ? 'backdrop-blur-sm bg-[hsl(var(--surface-1)_/_0.8)] border-b border-[hsl(240_8%_18%_/_0.5)]' 
+          : 'bg-[var(--background-surface)] border-b border-gray-800'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="flex items-center justify-between">
+          {/* Brand */}
+          <Link href="/" className="flex items-center space-x-3">
+            <h1 className={`text-2xl font-semibold ${
+              isStyleFoundation 
+                ? 'text-text-1 font-inter' 
+                : 'text-[var(--text-primary)] font-inter'
             }`}>
               Drift.ai
-            </div>
-            <div className={`text-sm ${
-              isStyleFoundation ? 'text-text-2' : 'text-gray-400'
+            </h1>
+            <span className={`text-sm hidden sm:block ${
+              isStyleFoundation 
+                ? 'text-text-2' 
+                : 'text-[var(--text-secondary)]'
             }`}>
               AI-powered reconciliation
-            </div>
+            </span>
           </Link>
-
-          {/* Navigation */}
-          <nav className="flex items-center gap-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  isActive(item.href)
-                    ? isStyleFoundation
-                      ? 'bg-[linear-gradient(180deg,hsl(var(--accent-400))_0%,hsl(var(--accent-500))_100%)] text-white shadow-elev-1'
-                      : 'bg-blue-600 text-white'
-                    : isStyleFoundation
-                      ? 'text-text-2 hover:text-text-1 hover:bg-white/5'
-                      : 'text-gray-300 hover:text-white hover:bg-zinc-700'
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+          
+          {/* Navigation Items */}
+          <div className="flex items-center gap-2">
+            {navItems.map((item) => {
+              const active = isActive(item.href);
+              
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                    isStyleFoundation
+                      ? active
+                        ? 'text-white bg-[linear-gradient(180deg,hsl(var(--accent-400))_0%,hsl(var(--accent-500))_100%)] shadow-elev-1'
+                        : 'text-text-2 hover:text-text-1 hover:bg-[hsl(var(--surface-2))] hover:shadow-elev-1'
+                      : active
+                        ? 'text-white bg-[var(--brand-steel-blue)]'
+                        : 'text-[var(--text-secondary)] hover:text-white hover:bg-[var(--background-surface-secondary)]'
+                  }`}
+                  aria-current={active ? 'page' : undefined}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </div>
-    </header>
+    </nav>
   );
 }

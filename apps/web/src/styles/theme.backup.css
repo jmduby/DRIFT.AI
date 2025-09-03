@@ -1,0 +1,37 @@
+:root {
+  /* Base */
+  --bg-0:  244 28% 6%;   /* near-black indigo */
+  --bg-1:  248 25% 10%;  /* panel base */
+  --bg-2:  258 30% 14%;  /* deeper panel */
+  --txt-1: 210 25% 96%;  /* primary text */
+  --txt-2: 220 12% 75%;  /* secondary */
+  --muted: 230 10% 55%;
+
+  /* Brand / accents (glow-ready) */
+  --brand:      265 92% 64%;  /* electric violet */
+  --brand-2:    200 100% 55%; /* cyan */
+  --accent-mag: 288 90% 66%;  /* magenta */
+  --accent-ora: 28 95% 58%;   /* orange for alerts/renewals */
+
+  /* Surfaces (glass) */
+  --glass:       248 25% 10% / 0.6;
+  --glass-edge:  260 60% 70% / 0.14; /* subtle outline */
+  --card-shadow: 0 8px 24px rgba(0,0,0,0.35);
+
+  /* Gradients */
+  --grad-1: linear-gradient(135deg, hsl(248 40% 12%) 0%, hsl(275 55% 14%) 40%, hsl(210 45% 12%) 100%);
+  --grad-hero: radial-gradient(60% 80% at 75% 0%, hsl(265 90% 20% / 0.45), transparent 60%),
+               radial-gradient(50% 70% at 15% 10%, hsl(200 95% 22% / 0.35), transparent 55%);
+
+  /* KPI glows */
+  --glow-cyan:   0 0 36px hsl(200 100% 55% / 0.35);
+  --glow-violet: 0 0 36px hsl(265 92% 64% / 0.35);
+
+  /* Radii / spacing */
+  --radius: 16px;
+}
+
+/* Typography utilities */
+.font-tabular { 
+  font-variant-numeric: tabular-nums; 
+}

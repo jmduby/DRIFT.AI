@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { formatUSD } from '@/lib/format';
-import { useCountUp } from '@/lib/useCountUp';
+import { useCountUpV2 } from '@/lib/useCountUpV2';
 import { Skeleton } from '@/components/Skeleton';
 import { KpiCard } from '@/components/ui/KpiCard';
 import { PanelCard } from '@/components/ui/PanelCard';
 import { PrimaryButton } from '@/components/ui/Button';
 import { uiPolishPhase2 } from '@/lib/flags';
+import InvoiceUploader from '@/app/_components/InvoiceUploader';
 // Design System V1 implementation
 
 type TimeRange = 'mtd' | '30d' | 'quarter';
@@ -33,11 +34,7 @@ export default function DashboardPro() {
   const [timeRange] = useState<TimeRange>('mtd');
   const [data, setData] = useState<DashboardData | null>(null);
   
-  // Feature flag for UI V2 - default enabled in dev, controllable via env var
-  const uiV2Enabled = process.env.NEXT_PUBLIC_UI_V2 === "1" || 
-    (process.env.NEXT_PUBLIC_UI_V2 !== "0" && process.env.NODE_ENV !== "production");
-    
-  // Phase 2 UI Polish feature flag
+  // Phase 2 UI Polish feature flag - this controls the enhanced dashboard
   const isPhase2 = uiPolishPhase2();
 
   useEffect(() => {
@@ -80,9 +77,9 @@ export default function DashboardPro() {
   }, []);
 
   // Count-up animations for KPIs
-  const animatedVendors = useCountUp({ value: data?.totalActiveVendors || 0 });
-  const animatedDrift = useCountUp({ value: data?.totalDriftMTD || 0 });
-  const animatedInvoices = useCountUp({ value: data?.invoicesProcessedMTD || 0 });
+  const animatedVendors = useCountUpV2(data?.totalActiveVendors || 0);
+  const animatedDrift = useCountUpV2(data?.totalDriftMTD || 0);
+  const animatedInvoices = useCountUpV2(data?.invoicesProcessedMTD || 0);
 
   const formatDate = (dateString: string) => {
     try {
@@ -187,8 +184,8 @@ export default function DashboardPro() {
     );
   }
 
-  // Feature-flagged rendering
-  if (uiV2Enabled) {
+  // Phase 2 UI Polish rendering
+  if (isPhase2) {
     return (
       <div className="min-h-screen text-1 relative">
         <div className="relative z-10 mx-auto max-w-7xl px-6 py-8 space-y-6">
@@ -196,6 +193,9 @@ export default function DashboardPro() {
             <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Dashboard</h1>
             <p className="text-sm text-2 mt-1">Invoice processing overview and recent activity</p>
           </header>
+
+          {/* Invoice Uploader */}
+          <InvoiceUploader />
 
           {/* KPI Row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -381,11 +381,13 @@ export default function DashboardPro() {
     );
   }
 
-  // Legacy rendering (existing logic preserved)
+  // Legacy rendering fallback (Phase 2 disabled)
   return (
     <div className="space-y-6">
-      {/* Existing legacy dashboard rendering preserved for backward compatibility */}
-      <div>Legacy Dashboard - set NEXT_PUBLIC_UI_V2=1 to see new design</div>
+      <div className="text-center py-12">
+        <p className="text-text-secondary">Phase 2 UI Polish is disabled</p>
+        <p className="text-text-secondary text-sm">Enable with NEXT_PUBLIC_UI_POLISH_PHASE2=1</p>
+      </div>
     </div>
   );
 }

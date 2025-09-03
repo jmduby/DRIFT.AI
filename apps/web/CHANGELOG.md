@@ -1,16 +1,39 @@
 # Changelog
 
-## [Unreleased] - Design System V1
+## [Unreleased] - Style Foundation (Phase 2.1) Complete
 
-### Phase 2: Universal Design System Implementation
+### Style Foundation: Terzo-inspired Design System
+
+* **feat(ui)**: comprehensive design token system with CSS variables and HSL color space
+* **feat(tailwind)**: extended Tailwind config with style foundation token mapping
+* **feat(components)**: base UI primitives - Card, KpiTile, Badge with glass effects
+* **feat(dashboard)**: Style Foundation dashboard with tokenized colors and refined typography
+* **feat(vendors)**: Style Foundation vendors page with table styling and status badges
+* **feat(gradients)**: subtle Terzo-inspired background gradients (non-intrusive)
+* **feat(flags)**: NEXT_PUBLIC_THEME_FOUNDATION feature flag system (default enabled in dev)
+* **refactor(design)**: unified design language with consistent shadows, radii, and spacing
+* **docs**: comprehensive README section with usage examples and rollback instructions
+
+**How to Enable**: Set `NEXT_PUBLIC_THEME_FOUNDATION=1`
+**How to Rollback**: Set `NEXT_PUBLIC_THEME_FOUNDATION=0` or `git revert <commit>`
+
+**Breaking Changes**: None - all changes are feature-flagged and backward compatible
+
+## [Phase 2 Dashboard Polish] - Previously Complete
+
+### Phase 2: Universal Design System Implementation ✅
 
 * **feat(theme)**: universal CSS tokens for Terzo-inspired dark gradients and glass panels
 * **feat(tailwind)**: extended Tailwind config with design system colors (violet, cyan, surface hierarchy)
 * **feat(components)**: new UI primitives - KpiCard, PanelCard, Button variants with glassmorphism effects
 * **feat(dashboard)**: feature-flagged dashboard with hero gradient backgrounds and modern glass panels
 * **feat(animations)**: lightweight count-up animation hook (useCountUpV2) for KPI values with reduced motion support
+* **feat(uploader)**: Phase 2 styled invoice uploader with unified glass cards and gradient buttons
 * **style(charts)**: tuned data visualization styling with gradient bars and glow effects
-* **config(flags)**: NEXT_PUBLIC_UI_V2 environment variable (default enabled in dev)
+* **refactor(flags)**: unified uiPolishPhase2() feature flag system across all components
+* **config(flags)**: NEXT_PUBLIC_UI_POLISH_PHASE2 environment variable (default enabled in dev)
+
+**Phase 2 Status**: Complete - Enhanced dashboard with refined gradients, unified glass cards, premium charts, and micro-interactions
 
 **Breaking Changes**: None - all changes are feature-flagged and backward compatible
 
