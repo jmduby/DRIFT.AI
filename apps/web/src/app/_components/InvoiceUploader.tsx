@@ -112,16 +112,16 @@ export default function InvoiceUploader({ className = '' }: InvoiceUploaderProps
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         className={`
-          border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-200
+          glass border-dashed p-8 text-center cursor-pointer transition-all duration-200
           ${isDragOver 
-            ? 'border-blue-400 bg-blue-50' 
-            : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
+            ? 'border-cyan-400/60' 
+            : ''
           }
           ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}
         `}
         style={{ 
-          borderColor: isDragOver ? 'var(--brand-steel-blue)' : 'var(--background-surface-secondary)',
-          backgroundColor: isDragOver ? 'rgba(96, 165, 250, 0.1)' : 'var(--background-surface)'
+          borderColor: isDragOver ? 'hsl(var(--cyan-400) / 0.6)' : 'hsl(var(--stroke) / 0.25)',
+          backgroundColor: isDragOver ? 'hsl(var(--cyan-400) / 0.05)' : undefined
         }}
       >
         <input
@@ -135,8 +135,7 @@ export default function InvoiceUploader({ className = '' }: InvoiceUploaderProps
 
         <div className="flex flex-col items-center space-y-4">
           <div 
-            className="w-16 h-16 rounded-full flex items-center justify-center"
-            style={{ backgroundColor: 'var(--background-surface-secondary)' }}
+            className="w-16 h-16 rounded-full flex items-center justify-center bg-black/20 border border-white/10"
           >
             {isProcessing ? (
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
