@@ -51,13 +51,15 @@ export default function NewVendorPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           review: {
-            primaryName: extractedData.primaryName,
-            dbaName: extractedData.dbaName,
+            primary_name: extractedData.primary_name,
+            dba: extractedData.dba,
             category: extractedData.category,
-            effectiveDate: extractedData.effectiveDate,
-            renewalDate: extractedData.renewalDate,
-            endDate: extractedData.endDate,
-            contractSummary: extractedData.summary,
+            effective_date: extractedData.effective_date,
+            end_date: extractedData.end_date,
+            contract_summary: {
+              lines: [],
+              raw_text: extractedData.summary
+            },
           }
         }),
       });
@@ -68,7 +70,7 @@ export default function NewVendorPage() {
         throw new Error(result.error || 'Failed to create vendor');
       }
 
-      router.push(`/vendors/${result.id}`);
+      router.push('/vendors');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
@@ -165,7 +167,7 @@ export default function NewVendorPage() {
                   </label>
                   <input
                     type="text"
-                    value={extractedData.primaryName || ''}
+                    value={extractedData.primary_name || ''}
                     readOnly
                     className="w-full px-4 py-2 border rounded-lg"
                     style={{ backgroundColor: 'var(--background-surface)', color: 'var(--text-primary)' }}
@@ -178,7 +180,7 @@ export default function NewVendorPage() {
                   </label>
                   <input
                     type="text"
-                    value={extractedData.dbaName || ''}
+                    value={extractedData.dba || ''}
                     readOnly
                     className="w-full px-4 py-2 border rounded-lg"
                     style={{ backgroundColor: 'var(--background-surface)', color: 'var(--text-primary)' }}
@@ -204,7 +206,7 @@ export default function NewVendorPage() {
                   </label>
                   <input
                     type="text"
-                    value={extractedData.effectiveDate || 'Not specified'}
+                    value={extractedData.effective_date || 'Not specified'}
                     readOnly
                     className="w-full px-4 py-2 border rounded-lg"
                     style={{ backgroundColor: 'var(--background-surface)', color: 'var(--text-primary)' }}

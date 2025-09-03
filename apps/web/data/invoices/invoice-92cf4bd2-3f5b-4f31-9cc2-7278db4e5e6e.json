@@ -1,0 +1,75 @@
+{
+  "id": "92cf4bd2-3f5b-4f31-9cc2-7278db4e5e6e",
+  "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+  "vendorName": "Rumpke of Kentucky Inc",
+  "createdAt": "2025-09-03T03:03:37.370Z",
+  "period": "2025-08",
+  "total": 831.95,
+  "drift": 0,
+  "result": {
+    "invoice_lines": [
+      {
+        "item": "8YD FL/MONTH-MSW",
+        "qty": 5,
+        "unit_price": 120,
+        "amount": 600,
+        "date": "08/01/25"
+      },
+      {
+        "item": "6YD FL/MONTH-CRDBD",
+        "qty": 1,
+        "unit_price": 107.14,
+        "amount": 107.14,
+        "date": "08/01/25"
+      },
+      {
+        "item": "FUEL SURCHARGE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 124.81,
+        "date": "06/27/25"
+      }
+    ],
+    "mismatches": [
+      {
+        "kind": "missing_item",
+        "description": "Item '8YD FL/MONTH-MSW' is not found in the contract.",
+        "invoice_ref": "8YD FL/MONTH-MSW",
+        "contract_ref": null
+      },
+      {
+        "kind": "missing_item",
+        "description": "Item '6YD FL/MONTH-CRDBD' is not found in the contract.",
+        "invoice_ref": "6YD FL/MONTH-CRDBD",
+        "contract_ref": null
+      },
+      {
+        "kind": "overbilling",
+        "description": "Total invoice amount ($1663.41) exceeds contract amount for current service terms.",
+        "invoice_ref": "Total: 1,663.41",
+        "contract_ref": null
+      }
+    ],
+    "summary": "The invoice includes services that are not listed in the contract, specifically for the monthly pickup services, leading to potential overbilling. The total for services on the invoice is $1663.41, which is higher than expected based on contract terms.",
+    "match": {
+      "score": 0.7366666666666667,
+      "candidates": [
+        {
+          "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+          "name": "Rumpke of Kentucky Inc",
+          "score": 0.7366666666666667
+        },
+        {
+          "vendorId": "01K46A981ZGGY2QQ5DZW3GQPEG",
+          "name": "Test Waste Services",
+          "score": 0.27
+        },
+        {
+          "vendorId": "01K46AFVJECBZ55P0Q1X2QB3X6",
+          "name": "Acme Waste Management LLC",
+          "score": 0.03
+        }
+      ]
+    }
+  }
+}

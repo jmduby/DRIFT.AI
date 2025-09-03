@@ -1,0 +1,44 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - link "Drift.ai AI-powered reconciliation" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - heading "Drift.ai" [level=1] [ref=e6] [cursor=pointer]
+        - generic [ref=e7] [cursor=pointer]: AI-powered reconciliation
+      - generic [ref=e8]:
+        - link "Home" [ref=e9] [cursor=pointer]:
+          - /url: /
+        - link "Login" [ref=e10] [cursor=pointer]:
+          - /url: /login
+        - link "Dashboard" [ref=e11] [cursor=pointer]:
+          - /url: /dashboard
+        - link "Vendors" [ref=e12] [cursor=pointer]:
+          - /url: /vendors
+        - link "Results" [ref=e13] [cursor=pointer]:
+          - /url: /results
+  - main [ref=e14]:
+    - generic [ref=e16]:
+      - generic [ref=e17]:
+        - heading "Drift.ai" [level=1] [ref=e18]
+        - paragraph [ref=e19]: AI-powered invoice reconciliation
+      - generic [ref=e22] [cursor=pointer]:
+        - button "Choose File" [ref=e23]
+        - generic [ref=e24] [cursor=pointer]:
+          - img [ref=e26] [cursor=pointer]
+          - paragraph [ref=e28] [cursor=pointer]: Upload your invoice
+          - paragraph [ref=e29] [cursor=pointer]: Drag and drop a PDF file here, or click to select
+          - paragraph [ref=e30] [cursor=pointer]: PDF files only • Maximum 1 file
+      - generic [ref=e31]:
+        - paragraph [ref=e32]: Upload your invoice PDF to begin AI-powered reconciliation
+        - generic [ref=e33]:
+          - link "Login" [ref=e34] [cursor=pointer]:
+            - /url: /login
+          - link "Dashboard" [ref=e35] [cursor=pointer]:
+            - /url: /dashboard
+          - link "Results" [ref=e36] [cursor=pointer]:
+            - /url: /results
+  - alert [ref=e37]
+```

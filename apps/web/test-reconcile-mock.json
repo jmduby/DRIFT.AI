@@ -1,0 +1,9 @@
+{
+  "matched_vendor": {
+    "id": "01K46A981ZGGY2QQ5DZW3GQPEG",
+    "primary_name": "Test Waste Services",
+    "score": 0.85,
+    "reason": "Exact name match"
+  },
+  "nextRoute": "/vendors/01K46A981ZGGY2QQ5DZW3GQPEG"
+}

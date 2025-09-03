@@ -1,16 +1,16 @@
 import { NextResponse } from 'next/server';
-import { getVendors } from '@/server/vendorStore';
+import { listVendors } from '@/server/store';
 
 export async function GET() {
   try {
-    const vendors = await getVendors();
+    const vendors = await listVendors();
     
-    // Return lightweight vendor list (no invoices or contract content)
+    // Return lightweight vendor list
     const vendorList = vendors.map(vendor => ({
       id: vendor.id,
-      canonical_name: vendor.canonical_name,
-      synonyms: vendor.synonyms,
-      account_numbers: vendor.account_numbers
+      primary_name: vendor.primary_name,
+      dba: vendor.dba,
+      account_numbers: vendor.account_numbers || []
     }));
 
     return NextResponse.json(vendorList);

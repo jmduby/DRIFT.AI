@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "mcp-server-playwright"],
+      "env": {}
+    }
+  },
+  "allow": [
+    "git *","gh *","ls","pwd","cat","mkdir *","touch *",
+    "pnpm *","npm *","npx *","tree -a -I node_modules","rg *","grep *"
+  ],
+  "deny": ["rm *"],
+  "mcp": {
+    "playwright": {
+      "allow": true,
+      "config": {
+        "browser": "chromium",
+        "headless": false,
+        "device": null,
+        "viewport": { "width": 1280, "height": 832 },
+        "visionMode": false
+      }
+    }
+  },
+  "hooks": "./.claude/hooks/hooks.json"
+}

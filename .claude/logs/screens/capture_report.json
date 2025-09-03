@@ -1,0 +1,96 @@
+{
+  "timestamp": "2025-09-02T17:01:20.492Z",
+  "viewport": {
+    "width": 1280,
+    "height": 832
+  },
+  "results": [
+    {
+      "route": "/",
+      "filename": "home_before_2025-09-02_17-01-08.png",
+      "status": 200,
+      "consoleMessages": [
+        {
+          "type": "info",
+          "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold",
+          "timestamp": "2025-09-02T17:01:04.664Z"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "route": "/login",
+      "filename": "login_before_2025-09-02_17-01-12.png",
+      "status": 200,
+      "consoleMessages": [
+        {
+          "type": "log",
+          "text": "[Fast Refresh] rebuilding",
+          "timestamp": "2025-09-02T17:01:08.797Z"
+        },
+        {
+          "type": "log",
+          "text": "[Fast Refresh] done in 143ms",
+          "timestamp": "2025-09-02T17:01:08.939Z"
+        },
+        {
+          "type": "verbose",
+          "text": "[DOM] Input elements should have autocomplete attributes (suggested: \"current-password\"): (More info: https://goo.gl/9p2vKq) %o",
+          "timestamp": "2025-09-02T17:01:08.952Z"
+        },
+        {
+          "type": "info",
+          "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold",
+          "timestamp": "2025-09-02T17:01:09.105Z"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "route": "/dashboard",
+      "filename": "dashboard_before_2025-09-02_17-01-16.png",
+      "status": 200,
+      "consoleMessages": [
+        {
+          "type": "log",
+          "text": "[Fast Refresh] rebuilding",
+          "timestamp": "2025-09-02T17:01:12.701Z"
+        },
+        {
+          "type": "log",
+          "text": "[Fast Refresh] done in 71ms",
+          "timestamp": "2025-09-02T17:01:12.771Z"
+        },
+        {
+          "type": "info",
+          "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold",
+          "timestamp": "2025-09-02T17:01:12.962Z"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "route": "/results",
+      "filename": "results_before_2025-09-02_17-01-20.png",
+      "status": 200,
+      "consoleMessages": [
+        {
+          "type": "log",
+          "text": "[Fast Refresh] rebuilding",
+          "timestamp": "2025-09-02T17:01:16.574Z"
+        },
+        {
+          "type": "log",
+          "text": "[Fast Refresh] done in 87ms",
+          "timestamp": "2025-09-02T17:01:16.661Z"
+        },
+        {
+          "type": "info",
+          "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold",
+          "timestamp": "2025-09-02T17:01:16.828Z"
+        }
+      ],
+      "errors": []
+    }
+  ]
+}

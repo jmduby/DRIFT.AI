@@ -1,0 +1,92 @@
+[
+  {
+    "id": "01K46MC82Q4C8KXXYEXV7EKHKT",
+    "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+    "uploadedAt": "2025-09-03T01:52:03.670Z",
+    "fileName": "test_rumpke_invoice.pdf",
+    "total": 95,
+    "lines": [
+      {
+        "item": "Weekly curbside collection",
+        "qty": 1,
+        "unit_price": 95,
+        "amount": 95,
+        "date": "2025-01-15"
+      },
+      {
+        "item": "Bi-weekly recycling collection",
+        "qty": 1,
+        "unit_price": 0,
+        "amount": 0,
+        "date": "2025-01-15"
+      }
+    ],
+    "source": {
+      "type": "upload",
+      "fileSize": 1995
+    },
+    "reconcileData": {
+      "invoice_lines": [
+        {
+          "item": "Weekly curbside collection",
+          "qty": 1,
+          "unit_price": 95,
+          "amount": 95,
+          "date": "2025-01-15"
+        },
+        {
+          "item": "Bi-weekly recycling collection",
+          "qty": 1,
+          "unit_price": 0,
+          "amount": 0,
+          "date": "2025-01-15"
+        }
+      ],
+      "contract_lines": [
+        {
+          "item": "Weekly curbside collection",
+          "qty": 1,
+          "unit_price": 95,
+          "amount": 95,
+          "date": null
+        },
+        {
+          "item": "Bi-weekly recycling collection",
+          "qty": 1,
+          "unit_price": null,
+          "amount": null,
+          "date": null
+        },
+        {
+          "item": "Monthly bulk item pickup",
+          "qty": 1,
+          "unit_price": null,
+          "amount": null,
+          "date": null
+        }
+      ],
+      "mismatches": [
+        {
+          "kind": "missing_item",
+          "description": "Monthly bulk item pickup is missing from the invoice",
+          "invoice_ref": "INV-2025-001",
+          "contract_ref": null
+        }
+      ],
+      "summary": "The invoice for RUMPKE OF KENTUCKY, INC includes charges for 'Weekly curbside collection' and 'Bi-weekly recycling collection', totaling $95.00. 'Monthly bulk item pickup' is listed in the contract but not included in the invoice, indicating a missing item.",
+      "matched_vendor": {
+        "id": "01K46BS1TW9CMKN7C9AXKX5DKE",
+        "canonical_name": "Rumpke of Kentucky Inc",
+        "score": 1,
+        "breakdown": {
+          "name": 0.95,
+          "account": 1,
+          "address": 0.7
+        },
+        "reason": "account",
+        "candidates": []
+      },
+      "needs_vendor_confirmation": false
+    }
+  }
+]

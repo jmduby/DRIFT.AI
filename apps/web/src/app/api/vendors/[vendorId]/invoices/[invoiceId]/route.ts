@@ -1,12 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getInvoice } from '@/server/vendorStore';
+import { getInvoice, getVendor } from '@/server/store';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { vendorId: string; invoiceId: string } }
 ) {
   try {
-    const { vendor, invoice } = await getInvoice(params.vendorId, params.invoiceId);
+    const invoice = await getInvoice(params.invoiceId);
+    if (!invoice) {
+      return NextResponse.json(
+        { error: 'Invoice not found', code: 'INVOICE_NOT_FOUND' },
+        { status: 404 }
+      );
+    }
+    
+    const vendor = invoice.vendorId ? await getVendor(invoice.vendorId) : null;
     
     return NextResponse.json({
       vendor,

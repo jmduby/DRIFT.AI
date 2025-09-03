@@ -1,0 +1,41 @@
+{
+  "invoice_lines": [
+    {
+      "item": "Weekly waste collection",
+      "qty": 4,
+      "unit_price": 95,
+      "amount": 380,
+      "date": "2025-01-15"
+    }
+  ],
+  "contract_lines": [
+    {
+      "item": "Weekly curbside collection",
+      "qty": 1,
+      "unit_price": 95,
+      "amount": 95,
+      "notes": "Monthly service"
+    }
+  ],
+  "mismatches": [],
+  "summary": "Invoice matches contract terms perfectly. Total amount: $380.00",
+  "matched_vendor": {
+    "id": "01K46BS1TW9CMKN7C9AXKX5DKE",
+    "primary_name": "RUMPKE OF KENTUCKY, INC",
+    "score": 0.91,
+    "candidates": [
+      {
+        "id": "01K46BS1TW9CMKN7C9AXKX5DKE",
+        "name": "RUMPKE OF KENTUCKY, INC",
+        "score": 0.91,
+        "reason": "name+acct (\"RUMPKE OF KENTUCKY INC\" ~ \"RUMPKE OF KENTUCKY, INC\")"
+      },
+      {
+        "id": "01K46AFVJECBZ55P0Q1X2QB3X6",
+        "name": "Acme Waste Management LLC",
+        "score": 0.23,
+        "reason": "name (\"RUMPKE\" ~ \"Acme\")"
+      }
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { moveInvoiceNew } from '@/server/vendorStore';
+import { getInvoice, updateInvoice } from '@/server/store';
 
 const ReassignSchema = z.object({
   fromVendorId: z.string(),
@@ -13,7 +13,15 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { fromVendorId, toVendorId, invoiceId } = ReassignSchema.parse(body);
     
-    await moveInvoiceNew(fromVendorId, toVendorId, invoiceId);
+    const invoice = await getInvoice(invoiceId);
+    if (!invoice) {
+      return NextResponse.json(
+        { error: 'Invoice not found', code: 'NOT_FOUND' },
+        { status: 404 }
+      );
+    }
+    
+    await updateInvoice(invoiceId, { vendorId: toVendorId });
     
     return NextResponse.json({
       ok: true,

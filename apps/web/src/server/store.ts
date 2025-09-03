@@ -86,6 +86,34 @@ export async function upsertVendor(vendor: Vendor): Promise<Vendor> {
   }
 }
 
+export async function createVendor(vendorData: Omit<Vendor, 'id'>): Promise<Vendor> {
+  const vendor: Vendor = {
+    id: randomUUID(),
+    ...vendorData
+  };
+  return upsertVendor(vendor);
+}
+
+export async function updateVendor(id: UUID, patch: Partial<Omit<Vendor, 'id'>>): Promise<Vendor | null> {
+  await ensureDataFiles();
+  try {
+    const vendors = await listVendors();
+    const existingIndex = vendors.findIndex(v => v.id === id);
+    
+    if (existingIndex >= 0) {
+      const updatedVendor = { ...vendors[existingIndex], ...patch };
+      vendors[existingIndex] = updatedVendor;
+      await atomicWrite(VENDORS_FILE, vendors);
+      return updatedVendor;
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('Failed to update vendor:', error);
+    throw error;
+  }
+}
+
 // Invoice operations
 export async function createInvoice(invoice: Invoice): Promise<Invoice> {
   await ensureDataFiles();

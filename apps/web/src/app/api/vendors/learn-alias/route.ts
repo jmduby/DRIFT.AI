@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getVendor, updateVendor } from '@/server/vendorStore';
+import { getVendor, updateVendor } from '@/server/store';
 import { normalizeName } from '@/lib/normalize';
 
 const LearnAliasSchema = z.object({

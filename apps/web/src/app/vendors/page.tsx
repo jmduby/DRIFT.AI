@@ -193,17 +193,9 @@ export default function VendorsPage() {
                   </div>
                   
                   <div className="col-span-2 text-right">
-                    <Link
-                      href={`/vendors/${vendor.id}`}
-                      className="px-3 py-1.5 text-sm font-medium rounded-lg border hover:opacity-80 transition-opacity"
-                      style={{ 
-                        borderColor: 'var(--text-secondary)', 
-                        color: 'var(--text-secondary)',
-                        borderRadius: '8px'
-                      }}
-                    >
-                      Open
-                    </Link>
+                    <span className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
+                      Active
+                    </span>
                   </div>
                 </div>
               ))}

@@ -1,0 +1,356 @@
+[
+  {
+    "id": "edca6c1a-ca7c-469e-b597-60674af70e9a",
+    "vendorId": null,
+    "uploadedAt": "2025-09-03T03:21:33.486Z",
+    "period": "2025-09",
+    "fileName": "test_rumpke_invoice.pdf",
+    "amounts": {
+      "subtotal": null,
+      "surcharge": null,
+      "totalCurrentCharges": 95,
+      "totalDue": 95
+    },
+    "lines": [
+      {
+        "item": "Weekly curbside collection",
+        "qty": 1,
+        "unit_price": 95,
+        "amount": 95,
+        "date": "January 15, 2025"
+      },
+      {
+        "item": "Bi-weekly recycling collection",
+        "qty": 1,
+        "unit_price": 0,
+        "amount": 0,
+        "date": "January 15, 2025"
+      }
+    ],
+    "mismatches": [
+      {
+        "kind": "other",
+        "description": "Bi-weekly recycling collection listed with a unit price of $0.00; no apparent service provided.",
+        "invoice_ref": "INV-2025-001",
+        "contract_ref": "HH-2489-KY"
+      }
+    ],
+    "match": {
+      "vendorId": null,
+      "score": 1,
+      "method": "name_similarity",
+      "candidates": []
+    }
+  },
+  {
+    "id": "4bf543db-cad6-4c9f-8043-3fcce55f9fff",
+    "vendorId": null,
+    "uploadedAt": "2025-09-03T03:23:14.671Z",
+    "period": "2025-09",
+    "fileName": "test_rumpke_invoice.pdf",
+    "amounts": {
+      "subtotal": null,
+      "surcharge": null,
+      "totalCurrentCharges": 95,
+      "totalDue": 95
+    },
+    "lines": [
+      {
+        "item": "Weekly curbside collection",
+        "qty": 1,
+        "unit_price": 95,
+        "amount": 95,
+        "date": "January 15, 2025"
+      },
+      {
+        "item": "Bi-weekly recycling collection",
+        "qty": 1,
+        "unit_price": 0,
+        "amount": 0,
+        "date": "January 15, 2025"
+      }
+    ],
+    "mismatches": [],
+    "match": {
+      "vendorId": null,
+      "score": 1,
+      "method": "name_similarity",
+      "candidates": []
+    }
+  },
+  {
+    "id": "da5f3789-2e4f-4431-8e96-99c23ce30368",
+    "vendorId": null,
+    "uploadedAt": "2025-09-03T03:23:40.131Z",
+    "period": "2025-09",
+    "fileName": "test_rumpke_invoice.pdf",
+    "amounts": {
+      "subtotal": null,
+      "surcharge": null,
+      "totalCurrentCharges": 95,
+      "totalDue": 95
+    },
+    "lines": [
+      {
+        "item": "Weekly curbside collection",
+        "qty": 1,
+        "unit_price": 95,
+        "amount": 95,
+        "date": "January 15, 2025"
+      },
+      {
+        "item": "Bi-weekly recycling collection",
+        "qty": 1,
+        "unit_price": 0,
+        "amount": 0,
+        "date": "January 15, 2025"
+      }
+    ],
+    "mismatches": [],
+    "match": {
+      "vendorId": null,
+      "score": 1,
+      "method": "name_similarity",
+      "candidates": []
+    }
+  },
+  {
+    "id": "7b8f718a-5451-4975-a0dd-932a7f5c5f28",
+    "vendorId": null,
+    "uploadedAt": "2025-09-03T03:59:17.356Z",
+    "period": "2025-09",
+    "fileName": "test_rumpke_invoice.pdf",
+    "amounts": {
+      "subtotal": null,
+      "surcharge": null,
+      "totalCurrentCharges": 95,
+      "totalDue": 95
+    },
+    "lines": [
+      {
+        "item": "Weekly curbside collection",
+        "qty": 1,
+        "unit_price": 95,
+        "amount": 95,
+        "date": "January 15, 2025"
+      },
+      {
+        "item": "Bi-weekly recycling collection",
+        "qty": 1,
+        "unit_price": 0,
+        "amount": 0,
+        "date": "January 15, 2025"
+      }
+    ],
+    "mismatches": [],
+    "match": {
+      "vendorId": null,
+      "score": 1,
+      "method": "name_similarity",
+      "candidates": []
+    }
+  },
+  {
+    "id": "b7e1426c-5911-4836-93a1-272c687e2fe8",
+    "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+    "uploadedAt": "2025-09-03T04:01:26.243Z",
+    "period": "2025-09",
+    "fileName": "Rumpke_-_Complete_with_DocuSign_48-_HELMWOOD.pdf",
+    "amounts": {
+      "subtotal": null,
+      "surcharge": null,
+      "totalCurrentCharges": 707.14,
+      "totalDue": 707.14
+    },
+    "lines": [
+      {
+        "item": "8 YARD FRONT LOAD",
+        "qty": null,
+        "unit_price": 600,
+        "amount": 600,
+        "date": "1/21/2025"
+      },
+      {
+        "item": "6 YARD FRONT LOAD",
+        "qty": 1,
+        "unit_price": 107.14,
+        "amount": 107.14,
+        "date": "1/21/2025"
+      },
+      {
+        "item": "MSW COMMERCIAL",
+        "qty": 1,
+        "unit_price": null,
+        "amount": null,
+        "date": "1/21/2025"
+      }
+    ],
+    "mismatches": [
+      {
+        "kind": "overbilling",
+        "description": "Expected amount for services rendered based on standard rates does not align with billed amounts, double-check customer service contracts for clarified rates and total payment.",
+        "invoice_ref": null,
+        "contract_ref": "HELMWOOD HEALTHCARE 20250121JM-1"
+      }
+    ],
+    "match": {
+      "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+      "score": 1,
+      "method": "name_similarity",
+      "candidates": [
+        {
+          "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+          "label": "RUMPKE OF KENTUCKY, INC",
+          "score": 1
+        },
+        {
+          "vendorId": "01K46AFVJECBZ55P0Q1X2QB3X6",
+          "label": "Acme Waste Management LLC",
+          "score": 0.5333333333333333
+        },
+        {
+          "vendorId": "01K46A981ZGGY2QQ5DZW3GQPEG",
+          "label": "Test Waste Services",
+          "score": 0.45
+        }
+      ]
+    }
+  },
+  {
+    "id": "00e074eb-3467-44c9-932c-6cff594a564b",
+    "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+    "uploadedAt": "2025-09-03T04:01:49.269Z",
+    "period": "2025-09",
+    "fileName": "25_Rumpke_Invoice_4801184330.pdf",
+    "amounts": {
+      "subtotal": null,
+      "surcharge": null,
+      "totalCurrentCharges": 2357.88,
+      "totalDue": 2357.88
+    },
+    "lines": [
+      {
+        "item": "8YD FL/MONTH-MSW",
+        "qty": 1,
+        "unit_price": 600,
+        "amount": 600,
+        "date": "05/01/25"
+      },
+      {
+        "item": "6YD FL/MONTH-CRDBD",
+        "qty": 1,
+        "unit_price": 107.14,
+        "amount": 107.14,
+        "date": "05/01/25"
+      },
+      {
+        "item": "FINANCE CHARGE",
+        "qty": null,
+        "unit_price": 12.3,
+        "amount": 12.3,
+        "date": "05/05/25"
+      },
+      {
+        "item": "PRIOR BALANCE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 1638.44,
+        "date": "04/30/25"
+      }
+    ],
+    "mismatches": [
+      {
+        "kind": "overbilling",
+        "description": "The total due on the invoice is 1,649.40, whereas the actual calculated total from line items is 719.84.",
+        "invoice_ref": "4801184330",
+        "contract_ref": null
+      },
+      {
+        "kind": "missing_item",
+        "description": "Invoice includes finance charge and prior balance which may not be expected in a standard invoice for ongoing services.",
+        "invoice_ref": "4801184330",
+        "contract_ref": null
+      }
+    ],
+    "match": {
+      "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+      "score": 0.9666666666666667,
+      "method": "name_similarity",
+      "candidates": [
+        {
+          "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+          "label": "RUMPKE OF KENTUCKY, INC",
+          "score": 0.9666666666666667
+        }
+      ]
+    }
+  },
+  {
+    "id": "ed9470c4-095d-4b5f-94ed-34c1b7fe873a",
+    "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+    "uploadedAt": "2025-09-03T04:14:46.419Z",
+    "period": "2025-09",
+    "fileName": "25_Rumpke_Invoice_4801184330.pdf",
+    "amounts": {
+      "subtotal": null,
+      "surcharge": null,
+      "totalCurrentCharges": 817.17,
+      "totalDue": 817.17
+    },
+    "lines": [
+      {
+        "item": "8YD FL/MONTH-MSW",
+        "qty": 5,
+        "unit_price": 120,
+        "amount": 600,
+        "date": "05/01/25"
+      },
+      {
+        "item": "6YD FL/MONTH-CRDBD",
+        "qty": 1,
+        "unit_price": 107.14,
+        "amount": 107.14,
+        "date": "05/01/25"
+      },
+      {
+        "item": "FUEL SURCHARGE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 110.03,
+        "date": "00/00/00"
+      }
+    ],
+    "mismatches": [
+      {
+        "kind": "overbilling",
+        "description": "Invoice total of $1,649.40 exceeds calculated total of $817.17 ($600.00 + $107.14 + $110.03).",
+        "invoice_ref": "4801184330",
+        "contract_ref": null
+      },
+      {
+        "kind": "missing_item",
+        "description": "Prior balance and payments appear on the invoice but are not itemized for clarity.",
+        "invoice_ref": "4801184330",
+        "contract_ref": null
+      },
+      {
+        "kind": "wrong_date",
+        "description": "Random date entry '00/00/00' for FUEL SURCHARGE is invalid.",
+        "invoice_ref": "4801184330",
+        "contract_ref": null
+      }
+    ],
+    "match": {
+      "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+      "score": 0.9666666666666667,
+      "method": "name_similarity",
+      "candidates": [
+        {
+          "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+          "label": "RUMPKE OF KENTUCKY, INC",
+          "score": 0.9666666666666667
+        }
+      ]
+    }
+  }
+]

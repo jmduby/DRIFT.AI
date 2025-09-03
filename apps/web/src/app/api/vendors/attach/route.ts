@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { appendInvoice, learn, getVendor } from '@/server/vendorStore';
+import { getVendor, createInvoice } from '@/server/store';
 
 const LineItemSchema = z.object({
   item: z.string(),
@@ -47,19 +47,30 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Append invoice to vendor
-    const storedInvoice = await appendInvoice(vendorId, {
+    // Create invoice
+    const storedInvoice = await createInvoice({
+      id: require('crypto').randomUUID(),
+      vendorId,
+      uploadedAt: new Date().toISOString(),
+      period: null,
       fileName: invoice.fileName,
-      total: invoice.total,
+      amounts: {
+        subtotal: null,
+        surcharge: null,
+        totalCurrentCharges: invoice.total,
+        totalDue: invoice.total
+      },
       lines: invoice.lines,
-      rawText: invoice.rawText,
-      matchMeta,
+      mismatches: [],
+      match: {
+        vendorId,
+        score: matchMeta?.score || 1.0,
+        method: 'manual',
+        candidates: []
+      }
     });
 
-    // Apply learning if provided
-    if (learnSignals) {
-      await learn(vendorId, learnSignals);
-    }
+    // Learning signals ignored in unified store
 
     return NextResponse.json({
       ok: true,

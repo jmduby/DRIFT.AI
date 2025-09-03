@@ -159,6 +159,7 @@ export async function POST(request: NextRequest) {
     let extractedData;
     try {
       extractedData = JSON.parse(messageContent);
+      console.log('OpenAI raw response:', JSON.stringify(extractedData, null, 2));
     } catch (parseError) {
       console.error('Failed to parse OpenAI response:', parseError);
       return NextResponse.json(
@@ -173,8 +174,22 @@ export async function POST(request: NextRequest) {
       throw new Error('timeout');
     }
 
-    // Validate the extracted data
-    const validatedData = ContractExtractSchema.parse(extractedData);
+    // Map OpenAI response format to expected schema format
+    const mappedData = {
+      primary_name: extractedData.primaryName || 'Unknown Vendor',
+      dba: extractedData.dbaName || null,
+      category: extractedData.category || null,
+      effective_date: extractedData.effectiveDate || null,
+      end_date: extractedData.endDate || null,
+      next_renewal: extractedData.renewalDate || null,
+      summary: extractedData.summary || 'Contract processed successfully',
+      keyTerms: extractedData.keyTerms || []
+    };
+    
+    console.log('Mapped data:', JSON.stringify(mappedData, null, 2));
+
+    // Validate the mapped data
+    const validatedData = ContractExtractSchema.parse(mappedData);
     
     // Store file token for later use
     const fileToken = storeFileToken(buffer, file.name);

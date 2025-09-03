@@ -1,0 +1,33 @@
+RUMPKE OF KENTUCKY INC
+INVOICE #4801184330
+Date: June 4, 2025
+Due Date: June 19, 2025
+
+Bill To:
+Helmwood Healthcare
+123 Healthcare Drive
+Louisville, KY 40202
+
+Customer Account: HH-2489-KY
+Service Address: 123 Healthcare Drive
+Phone: 859-555-0199
+Email: billing@rumpke.com
+
+SERVICES PROVIDED:
+Description                          Amount
+Waste Collection Service - Monthly   $89.95
+Recycling Service - Monthly          $25.00
+Bulk Item Pickup (1 item)           $15.00
+
+SUBTOTAL:                           $129.95
+TAX:                                 $0.00
+TOTAL AMOUNT DUE:                   $129.95
+
+PAYMENT OPTIONS:
+- Online: www.rumpke.com/pay
+- Phone: 859-555-0199
+- Mail: Rumpke of Kentucky, PO Box 1234, Louisville, KY 40201
+
+Thank you for your business!
+
+Questions? Contact us at billing@rumpke.com or 859-555-0199

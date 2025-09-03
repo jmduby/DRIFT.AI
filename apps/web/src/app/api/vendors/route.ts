@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getVendors, findByNameInsensitive, upsertVendor } from '@/server/vendorStore';
+import { listVendors, createVendor } from '@/server/store';
 import { CreateVendorSchema } from '@/lib/store/schemas';
 import { getFileTokenData } from '@/lib/fileTokens';
 
@@ -11,7 +11,7 @@ const CreateVendorRequestSchema = z.object({
 
 export async function GET() {
   try {
-    const vendors = await getVendors();
+    const vendors = await listVendors();
     return NextResponse.json(vendors);
   } catch (error) {
     console.error('Error fetching vendors:', error);
@@ -28,7 +28,10 @@ export async function POST(request: NextRequest) {
     const { review, fileToken } = CreateVendorRequestSchema.parse(body);
 
     // Check for duplicate vendor name
-    const existingVendor = await findByNameInsensitive(review.primary_name);
+    const vendors = await listVendors();
+    const existingVendor = vendors.find(v => 
+      v.primary_name.toLowerCase() === review.primary_name.toLowerCase()
+    );
     if (existingVendor) {
       return NextResponse.json(
         { 
@@ -51,28 +54,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Create new vendor
-    const now = new Date().toISOString();
-    const vendor = VendorSchema.parse({
-      id: `vendor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    const createdVendor = await createVendor({
       primary_name: review.primary_name,
       dba: review.dba,
       category: review.category,
       effective_date: review.effective_date,
-      next_renewal: review.next_renewal,
       end_date: review.end_date,
-      contract_summary: review.contract_summary,
-      created_at: now,
-      updated_at: now,
-    });
-
-    const createdVendor = await upsertVendor({
-      primary_name: review.primary_name,
-      dba: review.dba,
-      category: review.category,
-      effective_date: review.effective_date,
-      next_renewal: review.next_renewal,
-      end_date: review.end_date,
-      contract_summary: review.contract_summary,
+      contract_terms: review.contract_summary?.lines || []
     });
 
     return NextResponse.json(createdVendor, { status: 201 });
