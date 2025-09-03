@@ -80,8 +80,8 @@ export default async function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen p-8" style={{ backgroundColor: 'var(--background-app)' }}>
-      <div className="max-w-6xl mx-auto space-y-8">
+    <div className="min-h-screen p-8 relative">
+      <div className="relative z-10 max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold font-inter mb-2" style={{ color: 'var(--text-primary)' }}>

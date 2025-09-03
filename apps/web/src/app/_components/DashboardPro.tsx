@@ -186,8 +186,8 @@ export default function DashboardPro() {
   // Feature-flagged rendering
   if (uiV2Enabled) {
     return (
-      <div className="surface-hero min-h-screen text-1">
-        <div className="mx-auto max-w-7xl px-6 py-8 space-y-6">
+      <div className="min-h-screen text-1 relative">
+        <div className="relative z-10 mx-auto max-w-7xl px-6 py-8 space-y-6">
           <header className="mb-6">
             <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Dashboard</h1>
             <p className="text-sm text-2 mt-1">Invoice processing overview and recent activity</p>
