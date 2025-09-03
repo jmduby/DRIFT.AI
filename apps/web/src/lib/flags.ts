@@ -20,3 +20,10 @@ export function uiPolishPhase2(): boolean {
   // Default: enabled in development, disabled in production
   return process.env.NODE_ENV === 'development';
 }
+
+// Style Foundation - enhanced design system with HSL colors and consistent spacing
+export function styleFoundation(): boolean {
+  if (typeof process === 'undefined') return true;
+  const v = process.env.NEXT_PUBLIC_STYLE_FOUNDATION;
+  return v === undefined ? true : v !== 'false';
+}
