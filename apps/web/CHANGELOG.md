@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased] - UI
+
+* feat(theme): introduce Terzo-inspired design tokens with dark gradients and glowing accents
+* feat(ui): add GlassCard, KpiTile, and SectionHeader primitives with glassmorphism effects
+* style(dashboard): restyle with Terzo aesthetic - glass panels, cyan/violet glows, modern KPI tiles
+* feat(layout): add gradient backgrounds with radial glow overlays
+
 UI V2 Dashboard: Enterprise design system with new KPI cards, charts, and actionable lists
 
 
