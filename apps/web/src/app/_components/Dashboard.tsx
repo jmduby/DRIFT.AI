@@ -2,9 +2,15 @@ import Link from 'next/link';
 import { formatUSD } from '@/lib/format';
 import { listVendors, getCurrentMonth } from '@/server/store';
 import { listInvoices } from '@/server/invoiceStore';
+import { dashPro } from '@/lib/flags';
 import InvoiceUploader from '@/app/_components/InvoiceUploader';
+import DashboardPro from '@/app/_components/DashboardPro';
 
 export default async function Dashboard() {
+  // Use enhanced dashboard if feature flag is enabled
+  if (dashPro()) {
+    return <DashboardPro />;
+  }
   const currentMonth = getCurrentMonth();
   
   // Get all vendors and invoices (excluding deleted)

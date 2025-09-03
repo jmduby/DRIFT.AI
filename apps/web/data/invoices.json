@@ -702,5 +702,74 @@
         }
       ]
     }
+  },
+  {
+    "id": "ad1b46a4-1d16-455b-bd48-7d293966d346",
+    "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+    "uploadedAt": "2025-09-03T14:21:31.866Z",
+    "period": "2025-09",
+    "fileName": "TEST 25_Rumpke_Invoice_4801184330 (3).pdf",
+    "amounts": {
+      "subtotal": null,
+      "surcharge": null,
+      "totalCurrentCharges": 1663.41,
+      "totalDue": 1663.41
+    },
+    "lines": [
+      {
+        "item": "PRIOR BALANCE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 831.46,
+        "date": null
+      },
+      {
+        "item": "8YD FL/MONTH-MSW",
+        "qty": 5,
+        "unit_price": 1,
+        "amount": 600,
+        "date": "08/01/25"
+      },
+      {
+        "item": "6YD FL/MONTH-CRDBD",
+        "qty": 1,
+        "unit_price": 1,
+        "amount": 107.14,
+        "date": "08/01/25"
+      },
+      {
+        "item": "FUEL SURCHARGE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 124.81,
+        "date": "06/27/25"
+      }
+    ],
+    "mismatches": [
+      {
+        "kind": "overbilling",
+        "description": "Invoice total of 1,663.41 exceeds the sum of individual charges (831.46 + 600.00 + 107.14 + 124.81 = 1663.41).",
+        "invoice_ref": "002327887",
+        "contract_ref": "4801184330"
+      },
+      {
+        "kind": "wrong_date",
+        "description": "Date for PRIOR BALANCE does not align with the service transactions. It should be before 08/01/25 but listed as part of the invoice without a service date.",
+        "invoice_ref": "002327887",
+        "contract_ref": "4801184330"
+      }
+    ],
+    "match": {
+      "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+      "score": 0.9666666666666667,
+      "method": "name_similarity",
+      "candidates": [
+        {
+          "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+          "label": "RUMPKE OF KENTUCKY, INC",
+          "score": 0.9666666666666667
+        }
+      ]
+    }
   }
 ]

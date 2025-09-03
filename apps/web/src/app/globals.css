@@ -5,26 +5,55 @@
 @tailwind utilities;
 
 :root {
-  /* Drift.ai Dark Theme - PRD Spec */
+  /* Drift.ai Dark Theme - PRD Spec (Legacy) */
   --background-app: #0a0a0a;
   --background-surface: #121212;
   --background-surface-secondary: #1a1a1a;
   --text-primary: #f5f5f5;
   --text-secondary: #c9c9c9;
   
-  /* Brand Colors */
+  /* Brand Colors (Legacy) */
   --brand-maroon: #800020;
   --brand-steel-blue: #4682b4;
   --brand-gold: #d4a017;
+  --brand-yellow: #d4a017;
   
-  /* Semantic Colors */
+  /* Semantic Colors (Legacy) */
   --semantic-success: #22c55e;
   --semantic-warning: #eab308;
   --semantic-error: #ef4444;
   --semantic-info: #60a5fa;
   
-  /* Focus Ring */
+  /* Focus Ring (Legacy) */
   --focus-ring: #4682b4;
+
+  /* UI V2 - HSL Design System */
+  --brand: 222 89% 55%;
+  --bg: 0 0% 100%;
+  --fg: 224 71.4% 4.1%;
+  --muted: 220 14% 96%;
+  --muted-foreground: 220 8.9% 46.1%;
+  --card: 0 0% 100%;
+  --card-foreground: 224 71% 4%;
+  --border: 220 13% 91%;
+  --ring: 222 89% 55%;
+  --success: 142 71% 45%;
+  --warning: 38 92% 50%;
+  --danger: 0 84% 60%;
+}
+
+.dark {
+  --bg: 222 47% 11%;
+  --fg: 213 31% 91%;
+  --muted: 223 47% 18%;
+  --muted-foreground: 215.4 16.3% 56.9%;
+  --card: 222 47% 13%;
+  --card-foreground: 213 31% 91%;
+  --border: 223 47% 22%;
+  --ring: 217 91% 60%;
+  --success: 142 71% 45%;
+  --warning: 38 92% 60%;
+  --danger: 0 84% 63%;
 }
 
 * {
