@@ -9,7 +9,8 @@ import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { KpiTile } from '@/components/ui/kpi-tile';
 import { Badge } from '@/components/ui/badge';
 import { styleFoundation } from '@/lib/flags';
-import InvoiceUploader from '@/app/_components/InvoiceUploader';
+import HeaderActions from '@/components/dashboard/HeaderActions';
+import IngestionStatus from '@/components/dashboard/IngestionStatus';
 
 type TimeRange = 'mtd' | '30d' | 'quarter';
 
@@ -168,13 +169,16 @@ export default function DashboardFoundation() {
   return (
     <div className="px-6 py-6 md:px-8 md:py-8 space-y-6">
       {/* Header */}
-      <header>
-        <h1 className="text-[20px] font-semibold tracking-[-0.01em] text-text-1">Dashboard</h1>
-        <p className="text-sm text-text-2 mt-1">Invoice processing overview and recent activity</p>
+      <header className="flex items-center justify-between">
+        <div>
+          <h1 className="text-[20px] font-semibold tracking-[-0.01em] text-text-1">Dashboard</h1>
+          <p className="text-sm text-text-2 mt-1">Invoice processing overview and recent activity</p>
+        </div>
+        <HeaderActions />
       </header>
 
-      {/* Invoice Uploader */}
-      <InvoiceUploader />
+      {/* Ingestion Status Strip */}
+      <IngestionStatus />
 
       {/* KPI Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

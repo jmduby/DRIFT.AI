@@ -32,3 +32,15 @@ export function styleFoundation(): boolean {
   // Default: enabled in development, disabled in production
   return process.env.NODE_ENV === 'development';
 }
+
+// Ingestion Status Strip - shows auto-ingest connection status
+export function ingestionStatus(): boolean {
+  if (typeof process === 'undefined') return true;
+  
+  // Explicit enable/disable via env var
+  if (process.env.NEXT_PUBLIC_INGESTION_STATUS === '1') return true;
+  if (process.env.NEXT_PUBLIC_INGESTION_STATUS === '0') return false;
+  
+  // Default: enabled
+  return true;
+}
