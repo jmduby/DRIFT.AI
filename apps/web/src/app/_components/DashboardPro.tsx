@@ -219,10 +219,12 @@ export default function DashboardPro() {
                     </div>
                     <div className="flex-1 h-3 bg-bg.elev2 rounded-lg overflow-hidden">
                       <div 
-                        className="h-full rounded-lg transition-all duration-500 glow-cyan"
+                        className="h-full rounded-lg transition-all duration-500"
                         style={{
                           width: `${(item.value / item.max) * 100}%`,
-                          background: 'linear-gradient(90deg, hsl(var(--violet-600)), hsl(var(--cyan-400)))'
+                          background: 'hsl(196 100% 80% / 0.22)',
+                          border: '1px solid hsl(196 100% 80% / 0.85)',
+                          boxShadow: '0 0 8px hsl(196 100% 80% / 0.3)'
                         }}
                       />
                     </div>
@@ -243,9 +245,10 @@ export default function DashboardPro() {
                         className="w-full rounded-t-lg transition-all duration-500"
                         style={{ 
                           height: `${Math.max(2, (value / 200) * 80)}px`,
-                          background: value > 0 ? `linear-gradient(to top, hsl(var(--violet-600)), hsl(var(--purple-500)))` : 'hsl(var(--stroke))',
+                          background: value > 0 ? 'hsl(258 90% 66% / 0.22)' : 'hsl(var(--stroke) / 0.3)',
+                          border: value > 0 ? '1px solid hsl(258 90% 66% / 0.85)' : '1px solid hsl(var(--stroke) / 0.5)',
                           opacity: value === 0 ? 0.3 : 1,
-                          boxShadow: value > 50 ? '0 0 12px hsl(var(--glow-violet) / .3)' : 'none'
+                          boxShadow: value > 50 ? '0 0 8px hsl(258 90% 66% / 0.25)' : 'none'
                         }}
                       />
                     </div>
