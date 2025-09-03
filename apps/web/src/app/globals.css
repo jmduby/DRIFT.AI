@@ -140,7 +140,8 @@ h1, h2, h3, h4, h5, h6 {
   /* Shadows (multipliers) */
   --phase2-shadow-1: 0.25;
   --phase2-shadow-2: 0.35;
-}
+  
+  /* Legacy V1 colors (continued) */
   --violet-700: 266 77% 60%;
   --purple-500: 257 80% 64%;
   --iris-400: 245 90% 70%;
