@@ -28,10 +28,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-     <body className={`${inter.variable} ${roboto.variable} antialiased`}>
-  <TopNav />
-  <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
-</body>
+      <body className={`${inter.variable} ${roboto.variable} antialiased min-h-screen bg-bg0 text-txt1 bg-grad-1`}>
+        <div className="fixed inset-0 bg-grad-hero" aria-hidden />
+        <div className="relative z-10">
+          <TopNav />
+          <main className="mx-auto max-w-[1320px] px-6 py-8">{children}</main>
+        </div>
+      </body>
     </html>
   );
 }
