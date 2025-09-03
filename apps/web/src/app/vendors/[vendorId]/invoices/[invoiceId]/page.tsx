@@ -20,7 +20,7 @@ export default async function InvoiceDetailPage({ params }: Props) {
 
   // Fetch vendor and other invoices if matched
   let vendor = null;
-  let otherInvoices: any[] = [];
+  let otherInvoices: Array<{id: string; uploadedAt: string; amounts: {totalCurrentCharges: number}}> = [];
   if (invoice.vendorId) {
     vendor = await getVendor(invoice.vendorId);
     if (vendor) {
@@ -36,12 +36,35 @@ export default async function InvoiceDetailPage({ params }: Props) {
   return (
     <div className="min-h-screen p-8" style={{ backgroundColor: 'var(--background-app)' }}>
       <div className="max-w-7xl mx-auto space-y-8">
+        {/* Breadcrumbs */}
+        <nav className="flex items-center gap-2 text-sm font-roboto" style={{ color: 'var(--text-secondary)' }}>
+          <Link href="/" className="hover:underline">Dashboard</Link>
+          <span>→</span>
+          {vendor ? (
+            <>
+              <Link href="/vendors" className="hover:underline">Vendors</Link>
+              <span>→</span>
+              <Link href={`/vendors/${vendor.id}`} className="hover:underline">{vendor.primary_name}</Link>
+              <span>→</span>
+            </>
+          ) : (
+            <>
+              <Link href="/vendors" className="hover:underline">Vendors</Link>
+              <span>→</span>
+              <span>Unmatched</span>
+              <span>→</span>
+            </>
+          )}
+          <span style={{ color: 'var(--text-primary)' }}>Invoice #{invoice.id.slice(0, 8)}</span>
+        </nav>
+
         {/* Header */}
         <div className="flex items-center gap-4">
           <Link
-            href="/dashboard"
+            href={vendor ? `/vendors/${vendor.id}` : "/dashboard"}
             className="p-2 rounded-lg hover:opacity-80 transition-opacity"
             style={{ backgroundColor: 'var(--background-surface)' }}
+            title={vendor ? "Back to vendor" : "Back to dashboard"}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" 
                  style={{ color: 'var(--text-secondary)' }}>
@@ -72,6 +95,39 @@ export default async function InvoiceDetailPage({ params }: Props) {
                 )}
               </div>
             </div>
+          </div>
+          
+          {/* Analysis View Link (when available) */}
+          <div className="flex items-center gap-2">
+            <script 
+              dangerouslySetInnerHTML={{
+                __html: `
+                  (function() {
+                    const lastReconcile = localStorage.getItem('reconcile:last');
+                    const analysisLink = document.getElementById('analysis-view-link');
+                    if (lastReconcile && analysisLink) {
+                      analysisLink.style.display = 'block';
+                    }
+                  })();
+                `
+              }}
+            />
+            <Link
+              id="analysis-view-link"
+              href="/results"
+              style={{ display: 'none' }}
+              className="px-3 py-1 text-xs font-medium text-white rounded-lg hover:opacity-90 transition-opacity"
+              title="Open detailed analysis view"
+            >
+              <div className="flex items-center gap-1" style={{ backgroundColor: 'var(--background-surface)' }}>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                     style={{ color: 'var(--text-secondary)' }}>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                <span style={{ color: 'var(--text-secondary)' }}>Analysis</span>
+              </div>
+            </Link>
           </div>
         </div>
 

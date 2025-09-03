@@ -39,23 +39,34 @@ async function atomicWrite(filePath: string, data: any): Promise<void> {
 }
 
 // Vendor operations
-export async function getVendor(id: UUID): Promise<Vendor | null> {
+export async function getVendor(id: UUID, options: { includeDeleted?: boolean } = {}): Promise<Vendor | null> {
   await ensureDataFiles();
   try {
     const data = await fs.readFile(VENDORS_FILE, 'utf8');
     const vendors: Vendor[] = JSON.parse(data);
-    return vendors.find(v => v.id === id) || null;
+    const vendor = vendors.find(v => v.id === id);
+    
+    if (!vendor) return null;
+    if (!options.includeDeleted && vendor.deletedAt) return null;
+    
+    return vendor;
   } catch (error) {
     console.error(`Failed to get vendor ${id}:`, error);
     return null;
   }
 }
 
-export async function listVendors(): Promise<Vendor[]> {
+export async function listVendors(options: { includeDeleted?: boolean } = {}): Promise<Vendor[]> {
   await ensureDataFiles();
   try {
     const data = await fs.readFile(VENDORS_FILE, 'utf8');
-    return JSON.parse(data);
+    const vendors: Vendor[] = JSON.parse(data);
+    
+    if (options.includeDeleted) {
+      return vendors;
+    }
+    
+    return vendors.filter(v => !v.deletedAt);
   } catch (error) {
     console.error('Failed to list vendors:', error);
     return [];
@@ -97,7 +108,7 @@ export async function createVendor(vendorData: Omit<Vendor, 'id'>): Promise<Vend
 export async function updateVendor(id: UUID, patch: Partial<Omit<Vendor, 'id'>>): Promise<Vendor | null> {
   await ensureDataFiles();
   try {
-    const vendors = await listVendors();
+    const vendors = await listVendors({ includeDeleted: true });
     const existingIndex = vendors.findIndex(v => v.id === id);
     
     if (existingIndex >= 0) {
@@ -111,6 +122,79 @@ export async function updateVendor(id: UUID, patch: Partial<Omit<Vendor, 'id'>>)
   } catch (error) {
     console.error('Failed to update vendor:', error);
     throw error;
+  }
+}
+
+// Soft delete operations
+export async function softDeleteVendor(id: UUID, byUser?: string): Promise<{ ok: true } | { ok: false; error: string }> {
+  await ensureDataFiles();
+  try {
+    const vendors = await listVendors({ includeDeleted: true });
+    const existingIndex = vendors.findIndex(v => v.id === id);
+    
+    if (existingIndex < 0) {
+      return { ok: false, error: 'vendor_not_found' };
+    }
+    
+    const vendor = vendors[existingIndex];
+    if (vendor.deletedAt) {
+      return { ok: false, error: 'already_deleted' };
+    }
+    
+    const now = new Date().toISOString();
+    const auditEntry = { ts: now, action: 'delete' as const, user: byUser };
+    
+    vendors[existingIndex] = {
+      ...vendor,
+      deletedAt: now,
+      audit: [...(vendor.audit || []), auditEntry]
+    };
+    
+    await atomicWrite(VENDORS_FILE, vendors);
+    return { ok: true };
+  } catch (error) {
+    console.error('Failed to soft delete vendor:', error);
+    return { ok: false, error: 'internal_error' };
+  }
+}
+
+export async function restoreVendor(id: UUID, byUser?: string): Promise<{ ok: true } | { ok: false; error: string }> {
+  await ensureDataFiles();
+  try {
+    const vendors = await listVendors({ includeDeleted: true });
+    const existingIndex = vendors.findIndex(v => v.id === id);
+    
+    if (existingIndex < 0) {
+      return { ok: false, error: 'vendor_not_found' };
+    }
+    
+    const vendor = vendors[existingIndex];
+    if (!vendor.deletedAt) {
+      return { ok: false, error: 'not_deleted' };
+    }
+    
+    // Check if restore window has expired (30 days)
+    const deletedDate = new Date(vendor.deletedAt);
+    const now = new Date();
+    const daysDiff = (now.getTime() - deletedDate.getTime()) / (1000 * 60 * 60 * 24);
+    
+    if (daysDiff > 30) {
+      return { ok: false, error: 'restore_window_expired' };
+    }
+    
+    const auditEntry = { ts: now.toISOString(), action: 'restore' as const, user: byUser };
+    const { deletedAt, ...vendorWithoutDeleted } = vendor;
+    
+    vendors[existingIndex] = {
+      ...vendorWithoutDeleted,
+      audit: [...(vendor.audit || []), auditEntry]
+    };
+    
+    await atomicWrite(VENDORS_FILE, vendors);
+    return { ok: true };
+  } catch (error) {
+    console.error('Failed to restore vendor:', error);
+    return { ok: false, error: 'internal_error' };
   }
 }
 
@@ -166,9 +250,15 @@ export async function getInvoice(id: UUID): Promise<Invoice | null> {
   }
 }
 
-export async function listInvoicesByVendor(vendorId: UUID): Promise<Invoice[]> {
+export async function listInvoicesByVendor(vendorId: UUID, options: { includeDeleted?: boolean } = {}): Promise<Invoice[]> {
   await ensureDataFiles();
   try {
+    // Check if vendor is deleted
+    if (!options.includeDeleted) {
+      const vendor = await getVendor(vendorId, { includeDeleted: false });
+      if (!vendor) return []; // Vendor is deleted or doesn't exist
+    }
+    
     const invoices = await listInvoices();
     return invoices
       .filter(inv => inv.vendorId === vendorId)

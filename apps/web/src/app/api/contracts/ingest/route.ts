@@ -177,7 +177,7 @@ export async function POST(request: NextRequest) {
 
     // Check for existing vendor by primary name
     const allVendors = await listVendors();
-    let existingVendor = allVendors.find(v => 
+    const existingVendor = allVendors.find(v => 
       v.primary_name.toLowerCase() === normalizedPrimaryName.toLowerCase()
     ) || null;
     

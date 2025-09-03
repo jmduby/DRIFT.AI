@@ -1,32 +1,44 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Vendor } from '@/lib/store/schemas';
 
 export default function VendorsPage() {
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showDeleted, setShowDeleted] = useState(false);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+
+  const fetchVendors = useCallback(async () => {
+    try {
+      const url = showDeleted ? '/api/vendors?includeDeleted=1' : '/api/vendors';
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Failed to fetch vendors');
+      }
+      const data = await response.json();
+      setVendors(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
+  }, [showDeleted]);
 
   useEffect(() => {
-    async function fetchVendors() {
-      try {
-        const response = await fetch('/api/vendors');
-        if (!response.ok) {
-          throw new Error('Failed to fetch vendors');
-        }
-        const data = await response.json();
-        setVendors(data);
-      } catch (error) {
-        setError(error instanceof Error ? error.message : 'Unknown error');
-      } finally {
-        setLoading(false);
-      }
-    }
-
     fetchVendors();
-  }, []);
+  }, [fetchVendors]);
+
+  useEffect(() => {
+    // Show success message if redirected from delete
+    if (searchParams?.get('deleted') === 'true') {
+      // You could add a toast notification here
+    }
+  }, [searchParams]);
 
   const formatDate = (dateString: string | null | undefined) => {
     if (!dateString) return 'Not specified';
@@ -50,6 +62,38 @@ export default function VendorsPage() {
   const getNextRenewal = (vendor: Vendor) => {
     if (!vendor.next_renewal) return 'No renewal';
     return formatDate(vendor.next_renewal);
+  };
+
+  const handleRestore = async (vendorId: string) => {
+    setActionLoading(vendorId);
+    try {
+      const response = await fetch(`/api/vendors/${vendorId}/restore`, {
+        method: 'POST'
+      });
+      
+      if (response.status === 410) {
+        setError('Restore window expired (30 days)');
+        return;
+      }
+      
+      if (!response.ok) {
+        throw new Error('Failed to restore vendor');
+      }
+      
+      // Refresh vendor list
+      await fetchVendors();
+    } catch {
+      setError('Failed to restore vendor');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const isDeleted = (vendor: Vendor) => !!vendor.deletedAt;
+  const canRestore = (vendor: Vendor) => {
+    if (!vendor.deletedAt) return false;
+    const daysDiff = (new Date().getTime() - new Date(vendor.deletedAt).getTime()) / (1000 * 60 * 60 * 24);
+    return daysDiff <= 30;
   };
 
   if (loading) {
@@ -98,13 +142,25 @@ export default function VendorsPage() {
             </p>
           </div>
           
-          <Link
-            href="/vendors/new"
-            className="px-6 py-3 font-medium text-white rounded-lg font-roboto hover:opacity-90 transition-opacity"
-            style={{ backgroundColor: 'var(--brand-steel-blue)', borderRadius: '12px' }}
-          >
-            Add New Vendor
-          </Link>
+          <div className="flex items-center gap-4">
+            <label className="flex items-center gap-2 font-roboto text-sm" style={{ color: 'var(--text-secondary)' }}>
+              <input
+                type="checkbox"
+                checked={showDeleted}
+                onChange={(e) => setShowDeleted(e.target.checked)}
+                className="rounded"
+                style={{ accentColor: 'var(--brand-steel-blue)' }}
+              />
+              Show deleted
+            </label>
+            <Link
+              href="/vendors/new"
+              className="px-6 py-3 font-medium text-white rounded-lg font-roboto hover:opacity-90 transition-opacity"
+              style={{ backgroundColor: 'var(--brand-steel-blue)', borderRadius: '12px' }}
+            >
+              Add New Vendor
+            </Link>
+          </div>
         </div>
 
         {/* Vendors Table */}
@@ -154,51 +210,89 @@ export default function VendorsPage() {
 
             {/* Table Body */}
             <div className="divide-y" style={{ '--tw-divide-color': 'var(--background-surface-secondary)' } as React.CSSProperties}>
-              {vendors.map((vendor) => (
-                <div key={vendor.id} className="grid grid-cols-12 gap-4 p-4 hover:bg-gray-50 transition-colors">
-                  <div className="col-span-3">
-                    <h3 className="font-semibold font-inter" style={{ color: 'var(--text-primary)' }}>
-                      {vendor.primary_name}
-                    </h3>
+              {vendors.map((vendor) => {
+                const deleted = isDeleted(vendor);
+                const restorable = canRestore(vendor);
+                
+                return (
+                  <div 
+                    key={vendor.id} 
+                    className={`grid grid-cols-12 gap-4 p-4 hover:bg-gray-50 transition-colors ${
+                      deleted ? 'opacity-70' : ''
+                    }`}
+                  >
+                    <div className="col-span-3">
+                      <Link
+                        href={`/vendors/${vendor.id}`}
+                        className="font-semibold font-inter hover:underline text-blue-400 hover:text-blue-300 cursor-pointer"
+                        style={{ color: deleted ? 'var(--text-secondary)' : '#60a5fa' }}
+                      >
+                        {vendor.primary_name}
+                      </Link>
+                    </div>
+                    
+                    <div className="col-span-2">
+                      <span className="font-roboto text-sm" style={{ color: 'var(--text-secondary)' }}>
+                        {vendor.dba || '—'}
+                      </span>
+                    </div>
+                    
+                    <div className="col-span-1">
+                      <span 
+                        className="px-2 py-1 rounded-md text-xs font-medium"
+                        style={{ 
+                          backgroundColor: 'var(--background-surface-secondary)', 
+                          color: 'var(--text-secondary)' 
+                        }}
+                      >
+                        {vendor.category || 'Other'}
+                      </span>
+                    </div>
+                    
+                    <div className="col-span-2">
+                      <span className="font-roboto text-sm" style={{ color: 'var(--text-secondary)' }}>
+                        {formatDateRange(vendor.effective_date, vendor.end_date)}
+                      </span>
+                    </div>
+                    
+                    <div className="col-span-2">
+                      <span className="font-roboto text-sm" style={{ color: 'var(--text-secondary)' }}>
+                        {deleted ? formatDate(vendor.deletedAt) : getNextRenewal(vendor)}
+                      </span>
+                    </div>
+                    
+                    <div className="col-span-2 text-right">
+                      {deleted ? (
+                        <div className="flex items-center justify-end gap-2">
+                          <span 
+                            className="px-2 py-1 rounded-full text-xs font-medium"
+                            style={{ backgroundColor: '#EF4444', color: 'white', opacity: 0.7 }}
+                          >
+                            Deleted
+                          </span>
+                          {restorable && (
+                            <button
+                              onClick={() => handleRestore(vendor.id)}
+                              disabled={actionLoading === vendor.id}
+                              className="px-2 py-1 text-xs font-medium text-white rounded hover:opacity-90 transition-opacity disabled:opacity-50"
+                              style={{ backgroundColor: '#22C55E', borderRadius: '6px' }}
+                            >
+                              {actionLoading === vendor.id ? 'Restoring...' : 'Restore'}
+                            </button>
+                          )}
+                        </div>
+                      ) : (
+                        <span 
+                          className="px-2 py-1 rounded-full text-xs font-medium"
+                          style={{ backgroundColor: '#22C55E', color: 'white', opacity: 0.7 }}
+                        >
+                          Active
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  
-                  <div className="col-span-2">
-                    <span className="font-roboto text-sm" style={{ color: 'var(--text-secondary)' }}>
-                      {vendor.dba || '—'}
-                    </span>
-                  </div>
-                  
-                  <div className="col-span-1">
-                    <span 
-                      className="px-2 py-1 rounded-md text-xs font-medium"
-                      style={{ 
-                        backgroundColor: 'var(--background-surface-secondary)', 
-                        color: 'var(--text-secondary)' 
-                      }}
-                    >
-                      {vendor.category || 'Other'}
-                    </span>
-                  </div>
-                  
-                  <div className="col-span-2">
-                    <span className="font-roboto text-sm" style={{ color: 'var(--text-secondary)' }}>
-                      {formatDateRange(vendor.effective_date, vendor.end_date)}
-                    </span>
-                  </div>
-                  
-                  <div className="col-span-2">
-                    <span className="font-roboto text-sm" style={{ color: 'var(--text-secondary)' }}>
-                      {getNextRenewal(vendor)}
-                    </span>
-                  </div>
-                  
-                  <div className="col-span-2 text-right">
-                    <span className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
-                      Active
-                    </span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

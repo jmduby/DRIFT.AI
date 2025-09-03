@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getVendor } from '@/server/store';
+import { getVendor, softDeleteVendor } from '@/server/store';
 import type { UUID } from '@/types/domain';
 
 export async function GET(
@@ -7,7 +7,10 @@ export async function GET(
   { params }: { params: { vendorId: string } }
 ) {
   try {
-    const vendor = await getVendor(params.vendorId as UUID);
+    const url = new URL(request.url);
+    const includeDeleted = url.searchParams.get('includeDeleted') === '1';
+    
+    const vendor = await getVendor(params.vendorId as UUID, { includeDeleted });
     
     if (!vendor) {
       return NextResponse.json(
@@ -19,6 +22,31 @@ export async function GET(
     return NextResponse.json(vendor);
   } catch (error) {
     console.error('Error fetching vendor:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { vendorId: string } }
+) {
+  try {
+    const result = await softDeleteVendor(params.vendorId as UUID);
+    
+    if (!result.ok) {
+      const status = result.error === 'vendor_not_found' ? 404 : 400;
+      return NextResponse.json(
+        { error: result.error },
+        { status }
+      );
+    }
+    
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    console.error('Error deleting vendor:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

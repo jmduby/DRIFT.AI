@@ -9,9 +9,12 @@ const CreateVendorRequestSchema = z.object({
   fileToken: z.string().optional(),
 });
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const vendors = await listVendors();
+    const url = new URL(request.url);
+    const includeDeleted = url.searchParams.get('includeDeleted') === '1';
+    
+    const vendors = await listVendors({ includeDeleted });
     return NextResponse.json(vendors);
   } catch (error) {
     console.error('Error fetching vendors:', error);

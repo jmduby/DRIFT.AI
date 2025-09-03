@@ -100,3 +100,77 @@ Vendor data is stored in `data/vendors.json` with the following structure:
   }
 }
 ```
+
+## New Navigation (Feature Flag)
+
+The application includes a new navigation layout that can be toggled via feature flag.
+
+### Configuration
+
+Add to your `.env.local` file:
+
+```bash
+NEXT_PUBLIC_NEW_NAV=1
+```
+
+**Default**: `0` (disabled) - maintains existing navigation layout
+
+### Navigation Changes
+
+#### New Navigation (`NEXT_PUBLIC_NEW_NAV=1`)
+- **Header Layout**: Dashboard | Vendors | [Profile Icon]
+- **Home Route**: `/` renders dashboard directly (no redirect)
+- **Dashboard Route**: `/dashboard` remains accessible for deep links
+- **Hidden Link**: "Results" removed from global navigation (still accessible via URL)
+- **Breadcrumbs**: Added to invoice detail pages
+- **Analysis Link**: Added to invoice details when localStorage data exists
+- When enabled, primary links are right-aligned next to the profile menu.
+
+#### Legacy Navigation (`NEXT_PUBLIC_NEW_NAV=0` or unset)
+- **Header Layout**: Login | Dashboard | Vendors | Results (unchanged)
+- **Home Route**: `/` redirects to `/dashboard` (unchanged)
+- **All Routes**: Remain exactly as before
+
+### Testing
+
+Run navigation-specific smoke tests:
+
+```bash
+# Test new navigation behavior
+NEXT_PUBLIC_NEW_NAV=1 pnpm run test:smoke:nav
+
+# Test legacy navigation behavior  
+NEXT_PUBLIC_NEW_NAV=0 pnpm run test:smoke:nav
+
+# All navigation tests
+pnpm run test:smoke:nav
+```
+
+### Routes Preserved
+
+All existing routes remain functional:
+- `/` - Home (redirect in legacy, dashboard in new nav)
+- `/dashboard` - Dashboard page (always works)
+- `/vendors` - Vendor listing
+- `/vendors/[id]` - Vendor details  
+- `/vendors/[id]/invoices/[invId]` - Invoice details
+- `/results` - Analysis view (hidden from nav in new mode, but URL still works)
+- `/login` - Login page
+
+### Rollback Instructions
+
+To revert to legacy navigation:
+
+1. Remove or set `NEXT_PUBLIC_NEW_NAV=0` in `.env.local`
+2. Restart development server: `pnpm run dev`
+3. Verify: Results link should appear in global navigation
+
+### Implementation Files
+
+Key files modified for this feature:
+- `src/app/components/TopNav.tsx` - Feature-flagged navigation rendering
+- `src/app/page.tsx` - Conditional dashboard rendering vs redirect
+- `src/app/dashboard/page.tsx` - Shared dashboard component usage  
+- `src/app/_components/Dashboard.tsx` - Extracted shared dashboard logic
+- `src/app/vendors/[vendorId]/invoices/[invoiceId]/page.tsx` - Added breadcrumbs and analysis link
+- `tests/nav.smoke.spec.ts` - Navigation behavior testing

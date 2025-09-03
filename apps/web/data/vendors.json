@@ -1,140 +1,5 @@
 [
   {
-    "id": "01K46A981ZGGY2QQ5DZW3GQPEG",
-    "canonical_name": "Test Waste Services",
-    "synonyms": [
-      "Test Waste Services",
-      "Test Waste",
-      "TWS",
-      "TWS Inc"
-    ],
-    "account_numbers": [
-      "ACC123"
-    ],
-    "addresses": [
-      {
-        "line1": "123 Test St",
-        "city": "City",
-        "state": "ST",
-        "zip": "12345"
-      }
-    ],
-    "invoices": [],
-    "primary_name": "Test Waste Services",
-    "dba": "TWS",
-    "aliases": [
-      "Test Waste",
-      "TWS Inc"
-    ],
-    "category": "Updated Waste Management",
-    "effective_date": "2024-01-01",
-    "end_date": "2025-12-31",
-    "next_renewal": "2025-11-01",
-    "identifiers": {
-      "account_numbers": [
-        "ACC123"
-      ],
-      "phones": [
-        "555-0123"
-      ],
-      "emails": [
-        "contact@testwaste.com"
-      ],
-      "addresses": [
-        "123 Test St, City, ST 12345"
-      ]
-    },
-    "contract_summary": {
-      "lines": [
-        {
-          "item": "Weekly waste pickup",
-          "qty": 52,
-          "unit_price": 100,
-          "amount": 5200
-        }
-      ],
-      "terms": {
-        "effective_date": "2024-01-01",
-        "end_date": "2025-12-31",
-        "renewal": "Auto-renew annually",
-        "category": "Waste Management"
-      },
-      "raw_text": "Test contract for waste services..."
-    },
-    "created_at": "2025-09-02T22:55:39.583Z",
-    "updated_at": "2025-09-02T22:55:40.052Z"
-  },
-  {
-    "id": "01K46AFVJECBZ55P0Q1X2QB3X6",
-    "canonical_name": "Acme Waste Management LLC",
-    "synonyms": [
-      "Acme Waste Management LLC",
-      "Acme Waste Management",
-      "Acme Waste",
-      "ACME"
-    ],
-    "account_numbers": [
-      "WM-12345"
-    ],
-    "addresses": [
-      {
-        "line1": "123 Industrial Way",
-        "city": "Cityville",
-        "state": "ST",
-        "zip": "12345"
-      }
-    ],
-    "invoices": [],
-    "primary_name": "Acme Waste Management LLC",
-    "dba": "Acme Waste",
-    "aliases": [],
-    "category": "Waste Management",
-    "effective_date": "2024-01-01",
-    "end_date": "2025-12-31",
-    "next_renewal": "2025-11-01",
-    "identifiers": {
-      "account_numbers": [
-        "WM-12345"
-      ],
-      "phones": [
-        "555-0199"
-      ],
-      "emails": [
-        "billing@acmewaste.com"
-      ],
-      "addresses": [
-        "123 Industrial Way, Cityville, ST 12345"
-      ]
-    },
-    "contract_summary": {
-      "lines": [
-        {
-          "item": "Weekly trash collection",
-          "qty": null,
-          "unit_price": 150,
-          "amount": null,
-          "notes": "Monthly service"
-        },
-        {
-          "item": "Recycling pickup",
-          "qty": null,
-          "unit_price": 150,
-          "amount": null,
-          "notes": "Monthly service"
-        }
-      ],
-      "terms": {
-        "effective_date": "2024-01-01",
-        "end_date": "2025-12-31",
-        "renewal": "This agreement automatically renews annually.",
-        "category": "Waste Management"
-      },
-      "raw_text": "%PDF-1.4 1 0 obj Pages 2 0 R endobj 2 0 obj endobj 3 0 obj Parent 2 0 R Contents 4 0 R endobj 4 0 obj Length 400 stream BT F1 12 Tf 50 750 Td (SERVICE AGREEMENT) Tj 0 -20 Td (Company: Acme Waste Management LLC) Tj 0 -20 Td (DBA: Acme Waste) Tj 0 -20 Td (Service Category: Waste Management) Tj 0 -20 Td (Effective Date: 2024-01-01) Tj 0 -20 Td (End Date: 2025-12-31) Tj 0 -20 Td (Next Renewal: 2025-11-01) Tj 0 -20 Td (Account Number: WM-12345) Tj 0 -20 Td (Phone: 555-0199) Tj 0 -20 Td (Email: billing@acmewaste.com) Tj 0 -20 Td (Address: 123 Industrial Way, Cityville, ST 12345) Tj 0 -30 Td (Services: Weekly trash collection, recycling pickup) Tj 0 -20 Td (Monthly Rate: $150.00 per month) Tj 0 -20 Td (This agreement automatically renews annually.) Tj ET endstream endobj xref 0 5 0000000000 65535 f 0000000010 00000 n 0000000053 00000 n 0000000108 00000 n 0000000186 00000 n trailer Root 1 0 R startxref 635 %%EOF F1 12 Tf 50 750 Td (SERVICE AGREEMENT) Tj 0 -20 Td (Company: Acme Waste Management LLC) Tj 0 -20 Td (DBA: Acme Waste) Tj 0 -20 Td (Service Category: Waste Management) Tj 0 -20 Td (Effective Date: 2024-01-01) Tj 0 -20 Td (End Date: 2025-12-31) Tj 0 -20 Td (Next Renewal: 2025-11-01) Tj 0 -20 Td (Account Number: WM-12345) Tj 0 -20 Td (Phone: 555-0199) Tj 0 -20 Td (Email: billing@acmewaste.com) Tj 0 -20 Td (Address: 123 Industrial Way, Cityville, ST 12345) Tj 0 -30 Td (Services: Weekly trash collection, recycling pickup) Tj 0 -20 Td (Monthly Rate: $150.00 per month) Tj 0 -20 Td (This agreement automatically renews annually.) Tj ET endstream F1 12 Tf 50 750 Td (SERVICE AGREEMENT) Tj 0 -20 Td (Company: Acme Waste Management LLC) Tj 0 -20 Td (DBA: Acme Waste) Tj 0 -20 Td (Service Category: Waste Management) Tj 0 -20 Td (Effective Date: 2024-01-01) Tj 0 -20 Td (End Date: 2025-12-31) Tj 0 -20 Td (Next Renewal: 2025-11-01) Tj 0 -20 Td (Account Number: WM-12345) Tj 0 -20 Td (Phone: 555-0199) Tj 0 -20 Td (Email: billing@acmewaste.com) Tj 0 -20 Td (Address: 123 Industrial Way, C...[truncated]"
-    },
-    "created_at": "2025-09-02T22:59:16.174Z",
-    "updated_at": "2025-09-02T22:59:16.174Z"
-  },
-  {
     "id": "01K46BS1TW9CMKN7C9AXKX5DKE",
     "canonical_name": "Rumpke of Kentucky Inc",
     "synonyms": [
@@ -624,6 +489,15 @@
     "dba": "Evolve (Design)",
     "category": "Interior Design Services",
     "effective_date": "2024-11-25",
+    "end_date": null,
+    "contract_terms": []
+  },
+  {
+    "id": "7a9492a0-181c-4d67-81ff-010b751cbc1c",
+    "primary_name": "z. RADAR, LLC",
+    "dba": "Reimbursement Reimagined",
+    "category": "Professional Services",
+    "effective_date": "2025-02-01",
     "end_date": null,
     "contract_terms": []
   }

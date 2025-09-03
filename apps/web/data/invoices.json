@@ -352,5 +352,306 @@
         }
       ]
     }
+  },
+  {
+    "id": "a068fed8-5a71-486a-b02c-eda0f7de75e4",
+    "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+    "uploadedAt": "2025-09-03T04:49:51.118Z",
+    "period": "2025-09",
+    "fileName": "25_Rumpke_Invoice_4801184330 (1).pdf",
+    "amounts": {
+      "subtotal": null,
+      "surcharge": null,
+      "totalCurrentCharges": 2489.79,
+      "totalDue": 2489.79
+    },
+    "lines": [
+      {
+        "item": "PRIOR BALANCE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 1649.4,
+        "date": "06/03/25"
+      },
+      {
+        "item": "FINANCE CHARGE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 24.56,
+        "date": "06/01/25"
+      },
+      {
+        "item": "8YD FL/MONTH-MSW",
+        "qty": 5,
+        "unit_price": 1,
+        "amount": 600,
+        "date": "06/01/25"
+      },
+      {
+        "item": "6YD FL/MONTH-CRDBD",
+        "qty": 1,
+        "unit_price": 1,
+        "amount": 107.14,
+        "date": "06/01/25"
+      },
+      {
+        "item": "FUEL SURCHARGE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 108.69,
+        "date": "00/00/00"
+      }
+    ],
+    "mismatches": [
+      {
+        "kind": "overbilling",
+        "description": "Invoice total of 2489.79 exceeds the total of line items which sum to 2489.79; however, the breakdown suggests potential issues with charges.",
+        "invoice_ref": "4801184330",
+        "contract_ref": "4801184330000024897900000000"
+      }
+    ],
+    "match": {
+      "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+      "score": 0.9666666666666667,
+      "method": "name_similarity",
+      "candidates": [
+        {
+          "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+          "label": "RUMPKE OF KENTUCKY, INC",
+          "score": 0.9666666666666667
+        },
+        {
+          "vendorId": "63507af0-2398-4c46-b28f-a5ddfe763b82",
+          "label": "Test Vendor Company",
+          "score": 0.06666666666666667
+        }
+      ]
+    }
+  },
+  {
+    "id": "e879da1e-d9b4-4e25-8dcd-3c2eee12a6f8",
+    "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+    "uploadedAt": "2025-09-03T04:50:03.080Z",
+    "period": "2025-09",
+    "fileName": "25_Rumpke_Invoice_4801184330 (1).pdf",
+    "amounts": {
+      "subtotal": null,
+      "surcharge": null,
+      "totalCurrentCharges": 2489.79,
+      "totalDue": 2489.79
+    },
+    "lines": [
+      {
+        "item": "FINANCE CHARGE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 24.56,
+        "date": "06/03/25"
+      },
+      {
+        "item": "8YD FL/MONTH-MSW",
+        "qty": 5,
+        "unit_price": 1,
+        "amount": 600,
+        "date": "06/01/25"
+      },
+      {
+        "item": "6YD FL/MONTH-CRDBD",
+        "qty": 1,
+        "unit_price": 1,
+        "amount": 107.14,
+        "date": "06/01/25"
+      },
+      {
+        "item": "FUEL SURCHARGE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 108.69,
+        "date": "00/00/00"
+      },
+      {
+        "item": "PRIOR BALANCE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 1649.4,
+        "date": null
+      }
+    ],
+    "mismatches": [
+      {
+        "kind": "overbilling",
+        "description": "Invoice total ($2489.79) exceeds expected total sum of line items ($2389.79).",
+        "invoice_ref": "002327887",
+        "contract_ref": "4801184330"
+      },
+      {
+        "kind": "wrong_date",
+        "description": "FUEL SURCHARGE has an invalid date (00/00/00).",
+        "invoice_ref": "002327887",
+        "contract_ref": "4801184330"
+      }
+    ],
+    "match": {
+      "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+      "score": 0.9666666666666667,
+      "method": "name_similarity",
+      "candidates": [
+        {
+          "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+          "label": "RUMPKE OF KENTUCKY, INC",
+          "score": 0.9666666666666667
+        },
+        {
+          "vendorId": "63507af0-2398-4c46-b28f-a5ddfe763b82",
+          "label": "Test Vendor Company",
+          "score": 0.06666666666666667
+        }
+      ]
+    }
+  },
+  {
+    "id": "dd9705cd-5f0d-42b1-8a74-37316638babb",
+    "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+    "uploadedAt": "2025-09-03T05:10:56.463Z",
+    "period": "2025-09",
+    "fileName": "25_Rumpke_Invoice_4801184330 (1).pdf",
+    "amounts": {
+      "subtotal": null,
+      "surcharge": null,
+      "totalCurrentCharges": 2489.79,
+      "totalDue": 2489.79
+    },
+    "lines": [
+      {
+        "item": "PRIOR BALANCE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 1649.4,
+        "date": "N/A"
+      },
+      {
+        "item": "FINANCE CHARGE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 24.56,
+        "date": "06/03/25"
+      },
+      {
+        "item": "8YD FL/MONTH-MSW",
+        "qty": 5,
+        "unit_price": 600,
+        "amount": 600,
+        "date": "06/01/25"
+      },
+      {
+        "item": "6YD FL/MONTH-CRDBD",
+        "qty": 1,
+        "unit_price": 107.14,
+        "amount": 107.14,
+        "date": "06/01/25"
+      },
+      {
+        "item": "FUEL SURCHARGE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 108.69,
+        "date": "00/00/00"
+      }
+    ],
+    "mismatches": [],
+    "match": {
+      "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+      "score": 0.9666666666666667,
+      "method": "name_similarity",
+      "candidates": [
+        {
+          "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+          "label": "RUMPKE OF KENTUCKY, INC",
+          "score": 0.9666666666666667
+        },
+        {
+          "vendorId": "63507af0-2398-4c46-b28f-a5ddfe763b82",
+          "label": "Test Vendor Company",
+          "score": 0.06666666666666667
+        }
+      ]
+    }
+  },
+  {
+    "id": "78fac347-abef-47cc-b7de-76b4b029dca1",
+    "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+    "uploadedAt": "2025-09-03T05:21:04.241Z",
+    "period": "2025-09",
+    "fileName": "25_Rumpke_Invoice_4801184330.pdf",
+    "amounts": {
+      "subtotal": null,
+      "surcharge": null,
+      "totalCurrentCharges": 1649.4,
+      "totalDue": 1649.4
+    },
+    "lines": [
+      {
+        "item": "8YD FL/MONTH-MSW",
+        "qty": 5,
+        "unit_price": 120,
+        "amount": 600,
+        "date": "05/01/25"
+      },
+      {
+        "item": "6YD FL/MONTH-CRDBD",
+        "qty": 1,
+        "unit_price": 107.14,
+        "amount": 107.14,
+        "date": "05/01/25"
+      },
+      {
+        "item": "FINANCE CHARGE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 12.3,
+        "date": "05/05/25"
+      },
+      {
+        "item": "PRIOR BALANCE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 1638.44,
+        "date": "04/30/25"
+      },
+      {
+        "item": "PAYMENT - CK# MC0430",
+        "qty": null,
+        "unit_price": null,
+        "amount": -818.51,
+        "date": null
+      },
+      {
+        "item": "FUEL SURCHARGE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 110.03,
+        "date": "00/00/00"
+      }
+    ],
+    "mismatches": [
+      {
+        "kind": "overbilling",
+        "description": "Total due on invoice is $1649.40 but calculated total amounts to $1,017.19",
+        "invoice_ref": "4801184330",
+        "contract_ref": null
+      }
+    ],
+    "match": {
+      "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+      "score": 0.9666666666666667,
+      "method": "name_similarity",
+      "candidates": [
+        {
+          "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+          "label": "RUMPKE OF KENTUCKY, INC",
+          "score": 0.9666666666666667
+        }
+      ]
+    }
   }
 ]

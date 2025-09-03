@@ -9,7 +9,9 @@
     "lint": "next lint",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:smoke": "playwright test tests/smoke.vendor.spec.ts"
+    "test:smoke": "playwright test tests/smoke.vendor.spec.ts",
+    "test:smoke:nav": "playwright test tests/nav.smoke.spec.ts",
+    "test:vendors": "playwright test tests/vendors.delete.restore.spec.ts"
   },
   "dependencies": {
     "@types/pdfkit": "^0.17.2",
