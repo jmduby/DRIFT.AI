@@ -1,0 +1,53 @@
+{
+  "id": "01K48FTT2SMBH0BJSR5S0WABWW",
+  "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+  "vendorName": "RUMPKE OF KENTUCKY, INC",
+  "period": "2025-09",
+  "total": 831.46,
+  "drift": 0,
+  "fileHash": "0c725f5d36bd4f47ddd79dfde6c90150f2c86f3fc14bc9d84be2b56e16415d40",
+  "textHash": "17d077be1c890467ef904f41ce3954bfb062fbb815d090efa995c1f1272f8357",
+  "fileName": "25_Rumpke_Invoice_4801184330 (2).pdf",
+  "number": null,
+  "createdAt": "2025-09-03T19:11:06.842Z",
+  "result": {
+    "invoice_lines": [
+      {
+        "item": "8YD FL/MONTH-MSW",
+        "qty": 5,
+        "unit_price": 600,
+        "amount": 600,
+        "date": "07/01/25"
+      },
+      {
+        "item": "6YD FL/MONTH-CRDBD",
+        "qty": 1,
+        "unit_price": 107.14,
+        "amount": 107.14,
+        "date": "07/01/25"
+      },
+      {
+        "item": "FUEL SURCHARGE",
+        "qty": null,
+        "unit_price": 124.32,
+        "amount": 124.32,
+        "date": "00/00/00"
+      }
+    ],
+    "mismatches": [],
+    "summary": "Total invoice amount is 831.46 with no discrepancies identified.",
+    "match": {
+      "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+      "score": 0.9666666666666667,
+      "method": "name_similarity",
+      "candidates": [
+        {
+          "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+          "label": "RUMPKE OF KENTUCKY, INC",
+          "score": 0.9666666666666667
+        }
+      ]
+    }
+  },
+  "deletedAt": "2025-09-03T19:12:45.434Z"
+}

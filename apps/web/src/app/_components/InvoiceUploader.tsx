@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { uiPolishPhase2 } from '@/lib/flags';
 
 interface InvoiceUploaderProps {
   className?: string;
@@ -13,6 +14,7 @@ export default function InvoiceUploader({ className = '' }: InvoiceUploaderProps
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const isPhase2 = uiPolishPhase2();
 
   const handleFileUpload = useCallback(async (files: FileList) => {
     const file = files[0];
@@ -112,16 +114,21 @@ export default function InvoiceUploader({ className = '' }: InvoiceUploaderProps
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         className={`
-          glass border-dashed p-8 text-center cursor-pointer transition-all duration-200
+          ${isPhase2 ? 'card-glass-v2 card-glass-v2--hover' : 'glass'} 
+          border-dashed p-8 text-center cursor-pointer transition-all duration-200
           ${isDragOver 
-            ? 'border-cyan-400/60' 
+            ? (isPhase2 ? 'border-p2-accent-500/60' : 'border-cyan-400/60')
             : ''
           }
           ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}
         `}
         style={{ 
-          borderColor: isDragOver ? 'hsl(var(--cyan-400) / 0.6)' : 'hsl(var(--stroke) / 0.25)',
-          backgroundColor: isDragOver ? 'hsl(var(--cyan-400) / 0.05)' : undefined
+          borderColor: isDragOver 
+            ? (isPhase2 ? 'rgba(var(--phase2-accent-500), 0.6)' : 'hsl(var(--cyan-400) / 0.6)')
+            : (isPhase2 ? 'rgba(var(--phase2-border-1), 0.25)' : 'hsl(var(--stroke) / 0.25)'),
+          backgroundColor: isDragOver 
+            ? (isPhase2 ? 'rgba(var(--phase2-accent-500), 0.05)' : 'hsl(var(--cyan-400) / 0.05)')
+            : undefined
         }}
       >
         <input
@@ -158,17 +165,23 @@ export default function InvoiceUploader({ className = '' }: InvoiceUploaderProps
           </div>
 
           <div>
-            <h3 className="text-lg font-medium font-inter mb-2" style={{ color: 'var(--text-primary)' }}>
+            <h3 className={`text-lg font-medium font-inter mb-2 ${
+              isPhase2 ? 'text-fg' : ''
+            }`} style={isPhase2 ? {} : { color: 'var(--text-primary)' }}>
               {isProcessing ? 'Processing invoice...' : 'Upload Invoice'}
             </h3>
-            <p className="font-roboto" style={{ color: 'var(--text-secondary)' }}>
+            <p className={`font-roboto ${
+              isPhase2 ? 'text-fg-muted' : ''
+            }`} style={isPhase2 ? {} : { color: 'var(--text-secondary)' }}>
               {isProcessing 
                 ? 'Please wait while we analyze your document'
                 : 'Drag and drop a PDF file here, or click to select'
               }
             </p>
             {!isProcessing && (
-              <p className="text-sm font-roboto mt-1" style={{ color: 'var(--text-secondary)' }}>
+              <p className={`text-sm font-roboto mt-1 ${
+                isPhase2 ? 'text-fg-muted' : ''
+              }`} style={isPhase2 ? {} : { color: 'var(--text-secondary)' }}>
                 PDF files only, up to 10MB
               </p>
             )}
@@ -176,8 +189,10 @@ export default function InvoiceUploader({ className = '' }: InvoiceUploaderProps
 
           {!isProcessing && (
             <button
-              className="px-6 py-3 font-medium text-white rounded-lg font-roboto hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: 'var(--brand-steel-blue)', borderRadius: '12px' }}
+              className={`px-6 py-3 font-medium text-white rounded-lg font-roboto hover:opacity-90 transition-opacity ${
+                isPhase2 ? 'btn-gradient' : ''
+              }`}
+              style={isPhase2 ? {} : { backgroundColor: 'var(--brand-steel-blue)', borderRadius: '12px' }}
             >
               Choose File
             </button>

@@ -4,8 +4,19 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Vendor } from '@/lib/store/schemas';
+import { styleFoundation } from '@/lib/flags';
+import VendorsFoundation from './VendorsFoundation';
 
 export default function VendorsPage() {
+  // Use style foundation if enabled
+  if (styleFoundation()) {
+    return <VendorsFoundation />;
+  }
+
+  return <VendorsLegacy />;
+}
+
+function VendorsLegacy() {
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

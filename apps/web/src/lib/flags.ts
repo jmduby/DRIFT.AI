@@ -20,3 +20,15 @@ export function uiPolishPhase2(): boolean {
   // Default: enabled in development, disabled in production
   return process.env.NODE_ENV === 'development';
 }
+
+// Style Foundation - Terzo-inspired design tokens and primitives
+export function styleFoundation(): boolean {
+  if (typeof process === 'undefined') return false;
+  
+  // Explicit enable/disable via env var
+  if (process.env.NEXT_PUBLIC_THEME_FOUNDATION === '1') return true;
+  if (process.env.NEXT_PUBLIC_THEME_FOUNDATION === '0') return false;
+  
+  // Default: enabled in development, disabled in production
+  return process.env.NODE_ENV === 'development';
+}

@@ -2,11 +2,17 @@ import Link from 'next/link';
 import { formatUSD } from '@/lib/format';
 import { listVendors, getCurrentMonth } from '@/server/store';
 import { listInvoices } from '@/server/invoiceStore';
-import { dashPro } from '@/lib/flags';
+import { dashPro, styleFoundation } from '@/lib/flags';
 import InvoiceUploader from '@/app/_components/InvoiceUploader';
 import DashboardPro from '@/app/_components/DashboardPro';
+import DashboardFoundation from '@/app/_components/DashboardFoundation';
 
 export default async function Dashboard() {
+  // Use style foundation dashboard if feature flag is enabled
+  if (styleFoundation()) {
+    return <DashboardFoundation />;
+  }
+  
   // Use enhanced dashboard if feature flag is enabled
   if (dashPro()) {
     return <DashboardPro />;

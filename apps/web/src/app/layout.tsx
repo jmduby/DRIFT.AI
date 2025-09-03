@@ -1,4 +1,4 @@
-import TopNav from './components/TopNav';
+import Header from '@/components/layout/Header';
 import type { Metadata } from "next";
 import { Inter, Roboto } from "next/font/google";
 import { uiPolishPhase2 } from '@/lib/flags';
@@ -45,7 +45,7 @@ export default function RootLayout({
         {!isPhase2 && <div className="fixed inset-0 bg-grad-hero" aria-hidden />}
         
         <div className="relative z-10">
-          <TopNav />
+          <Header />
           <main className="mx-auto max-w-[1320px] px-6 py-8">{children}</main>
         </div>
       </body>

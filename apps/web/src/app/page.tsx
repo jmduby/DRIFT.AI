@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation';
 import Dashboard from '@/app/_components/Dashboard';
 
 export default function Root() {
