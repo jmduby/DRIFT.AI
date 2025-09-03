@@ -10,7 +10,7 @@ export function KpiCard({
   className?: string 
 }) {
   return (
-    <div className={`card-glass shadow-panel p-5 rounded-xl ${className}`}>
+    <div className={`glass glass-hover p-5 ${className}`}>
       <div className="flex items-center justify-between">
         <span className="text-3">{label}</span>
         {icon && <span className="text-2">{icon}</span>}

@@ -98,8 +98,7 @@ export default async function Dashboard() {
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div 
-            className="rounded-xl shadow-lg p-6"
-            style={{ backgroundColor: 'var(--background-surface)' }}
+            className="glass glass-hover p-6"
           >
             <div className="flex items-center justify-between">
               <div>
@@ -110,7 +109,7 @@ export default async function Dashboard() {
                   {totalActiveVendors}
                 </p>
               </div>
-              <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--background-surface-secondary)' }}>
+              <div className="p-3 rounded-lg bg-black/20 border border-white/10">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" 
                      style={{ color: 'var(--brand-steel-blue)' }}>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
@@ -121,8 +120,7 @@ export default async function Dashboard() {
           </div>
 
           <div 
-            className="rounded-xl shadow-lg p-6"
-            style={{ backgroundColor: 'var(--background-surface)' }}
+            className="glass glass-hover p-6"
           >
             <div className="flex items-center justify-between">
               <div>
@@ -133,7 +131,7 @@ export default async function Dashboard() {
                   {formatUSD(totalDriftMTD)}
                 </p>
               </div>
-              <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--background-surface-secondary)' }}>
+              <div className="p-3 rounded-lg bg-black/20 border border-white/10">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" 
                      style={{ color: 'var(--brand-yellow)' }}>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
@@ -144,8 +142,7 @@ export default async function Dashboard() {
           </div>
 
           <div 
-            className="rounded-xl shadow-lg p-6"
-            style={{ backgroundColor: 'var(--background-surface)' }}
+            className="glass glass-hover p-6"
           >
             <div className="flex items-center justify-between">
               <div>
@@ -156,7 +153,7 @@ export default async function Dashboard() {
                   {invoicesProcessedMTD}
                 </p>
               </div>
-              <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--background-surface-secondary)' }}>
+              <div className="p-3 rounded-lg bg-black/20 border border-white/10">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" 
                      style={{ color: 'var(--brand-steel-blue)' }}>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
@@ -169,8 +166,7 @@ export default async function Dashboard() {
 
         {/* Recent Activity */}
         <div 
-          className="rounded-xl shadow-lg p-6"
-          style={{ backgroundColor: 'var(--background-surface)' }}
+          className="glass glass-hover p-6"
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold font-inter" style={{ color: 'var(--text-primary)' }}>
@@ -187,8 +183,7 @@ export default async function Dashboard() {
 
           {recentActivity.length === 0 ? (
             <div className="text-center py-12">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center" 
-                   style={{ backgroundColor: 'var(--background-surface-secondary)' }}>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center bg-black/20 border border-white/10">
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" 
                      style={{ color: 'var(--text-secondary)' }}>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
@@ -206,7 +201,7 @@ export default async function Dashboard() {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b" style={{ borderColor: 'var(--background-surface-secondary)' }}>
+                  <tr className="border-b" style={{ borderColor: 'hsl(var(--stroke) / 0.2)' }}>
                     <th className="text-left py-3 font-inter font-semibold" style={{ color: 'var(--text-primary)' }}>Vendor</th>
                     <th className="text-right py-3 font-inter font-semibold" style={{ color: 'var(--text-primary)' }}>Amount</th>
                     <th className="text-right py-3 font-inter font-semibold" style={{ color: 'var(--text-primary)' }}>Processed</th>
@@ -215,7 +210,7 @@ export default async function Dashboard() {
                 <tbody>
                   {recentActivity.map((item) => (
                     <tr key={item.id} className="border-b hover:bg-gray-50 cursor-pointer transition-colors" 
-                        style={{ borderColor: 'var(--background-surface-secondary)' }}>
+                        style={{ borderColor: 'hsl(var(--stroke) / 0.2)' }}>
                       <td className="py-4">
                         <Link href={handleRecentClick(item)}>
                           <div>
