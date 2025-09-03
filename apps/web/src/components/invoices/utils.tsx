@@ -1,4 +1,4 @@
-import { Issue, SeverityCounts } from './types';
+import { Issue } from './types';
 
 // Transform existing mismatch data to new Issue format
 interface MismatchData {

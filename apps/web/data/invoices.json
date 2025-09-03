@@ -959,5 +959,88 @@
         }
       ]
     }
+  },
+  {
+    "id": "be301014-6315-4117-be1b-d5b9619642a2",
+    "vendorId": "277bb354-ceb6-4f8d-8274-bc2f3bea58b7",
+    "uploadedAt": "2025-09-03T20:00:19.328Z",
+    "period": "2025-09",
+    "fileName": "25_Rumpke_Invoice_4801184330.pdf",
+    "amounts": {
+      "subtotal": null,
+      "surcharge": null,
+      "totalCurrentCharges": 1649.4,
+      "totalDue": 1649.4
+    },
+    "lines": [
+      {
+        "item": "8YD FL/MONTH-MSW",
+        "qty": 5,
+        "unit_price": 120,
+        "amount": 600,
+        "date": "05/01/25"
+      },
+      {
+        "item": "6YD FL/MONTH-CRDBD",
+        "qty": 1,
+        "unit_price": 107.14,
+        "amount": 107.14,
+        "date": "05/01/25"
+      },
+      {
+        "item": "FINANCE CHARGE",
+        "qty": null,
+        "unit_price": 12.3,
+        "amount": 12.3,
+        "date": "05/05/25"
+      },
+      {
+        "item": "PRIOR BALANCE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 1638.44,
+        "date": "04/30/25"
+      },
+      {
+        "item": "PAYMENT -  CK# MC0430",
+        "qty": null,
+        "unit_price": null,
+        "amount": -818.51,
+        "date": "05/05/25"
+      },
+      {
+        "item": "FUEL SURCHARGE",
+        "qty": null,
+        "unit_price": null,
+        "amount": 110.03,
+        "date": "00/00/00"
+      }
+    ],
+    "mismatches": [
+      {
+        "kind": "overbilling",
+        "description": "Invoice total of 1,649.40 exceeds expected charge based on line items which total 509.96 without considering prior balance and payment adjustments.",
+        "invoice_ref": "4801184330",
+        "contract_ref": null
+      },
+      {
+        "kind": "wrong_date",
+        "description": "Date '00/00/00' for Fuel Surcharge is invalid and does not align with expected date format.",
+        "invoice_ref": "4801184330",
+        "contract_ref": null
+      }
+    ],
+    "match": {
+      "vendorId": "277bb354-ceb6-4f8d-8274-bc2f3bea58b7",
+      "score": 0.9666666666666667,
+      "method": "name_similarity",
+      "candidates": [
+        {
+          "vendorId": "277bb354-ceb6-4f8d-8274-bc2f3bea58b7",
+          "label": "Rumpke of Kentucky, Inc",
+          "score": 0.9666666666666667
+        }
+      ]
+    }
   }
 ]

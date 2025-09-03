@@ -1,3 +1,5 @@
+'use client';
+
 import { styleFoundation } from '@/lib/flags';
 import { formatUSD } from '@/lib/format';
 

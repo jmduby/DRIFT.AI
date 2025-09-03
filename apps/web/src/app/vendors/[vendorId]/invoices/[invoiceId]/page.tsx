@@ -26,16 +26,10 @@ export default async function InvoiceDetailPage({ params }: Props) {
     redirect(`/vendors/${correctVendorId}/invoices/${invoice.id}`);
   }
 
-  // Fetch vendor and other invoices if matched
+  // Fetch vendor if matched
   let vendor = null;
-  let otherInvoices: Array<{id: string; uploadedAt: string; amounts: {totalCurrentCharges: number}}> = [];
   if (invoice.vendorId) {
     vendor = await getVendor(invoice.vendorId);
-    if (vendor) {
-      otherInvoices = (await listInvoicesByVendor(vendor.id))
-        .filter(inv => inv.id !== invoice.id)
-        .slice(0, 5);
-    }
   }
 
   const isUnmatched = !invoice.vendorId;
