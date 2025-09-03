@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { uiPolishPhase2 } from '@/lib/flags';
 
 interface NavConfig {
   centerItems: Array<{ href: string; label: string }>;
@@ -11,6 +12,7 @@ interface NavConfig {
 export default function TopNav() {
   const pathname = usePathname();
   const isNewNavEnabled = process.env.NEXT_PUBLIC_NEW_NAV === '1';
+  const isPhase2 = uiPolishPhase2();
 
   // Configure navigation based on feature flag
   const navConfig: NavConfig = isNewNavEnabled 
@@ -40,8 +42,12 @@ export default function TopNav() {
 
   return (
     <nav 
-      className="sticky top-0 z-50 border-b border-gray-800" 
-      style={{ backgroundColor: 'var(--background-surface)' }}
+      className={`sticky top-0 z-50 ${
+        isPhase2 
+          ? 'navbar-glass' 
+          : 'border-b border-gray-800'
+      }`}
+      style={isPhase2 ? {} : { backgroundColor: 'var(--background-surface)' }}
     >
       <div className="max-w-6xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between">

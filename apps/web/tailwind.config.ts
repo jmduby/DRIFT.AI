@@ -12,7 +12,7 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        // Design System V1 tokens
+        // Design System V1 tokens (preserved)
         bg: {
           void: 'hsl(var(--bg-void))',
           elev1: 'hsl(var(--bg-elev-1))',
@@ -38,7 +38,24 @@ const config: Config = {
           warning: 'hsl(var(--warning))',
           error:   'hsl(var(--error))',
           info:    'hsl(var(--info))',
-        }
+        },
+        // Phase 2 design tokens
+        'base': 'rgb(var(--phase2-bg-0))',
+        'surface': 'rgb(var(--phase2-bg-1))',
+        'fg': 'rgb(var(--phase2-fg-0))',
+        'fg-muted': 'rgb(var(--phase2-fg-1))',
+        'p2-brand': {
+          50: 'rgb(var(--phase2-brand-50))',
+          400: 'rgb(var(--phase2-brand-400))',
+          500: 'rgb(var(--phase2-brand-500))',
+          600: 'rgb(var(--phase2-brand-600))',
+          700: 'rgb(var(--phase2-brand-700))',
+        },
+        'p2-accent': {
+          500: 'rgb(var(--phase2-accent-500))',
+          600: 'rgb(var(--phase2-accent-600))',
+        },
+        'p2-border': 'rgb(var(--phase2-border-1))',
       },
       borderRadius: { xl: '16px', '2xl': '20px' },
       boxShadow: {

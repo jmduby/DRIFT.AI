@@ -8,6 +8,7 @@ import { Skeleton } from '@/components/Skeleton';
 import { KpiCard } from '@/components/ui/KpiCard';
 import { PanelCard } from '@/components/ui/PanelCard';
 import { PrimaryButton } from '@/components/ui/Button';
+import { uiPolishPhase2 } from '@/lib/flags';
 // Design System V1 implementation
 
 type TimeRange = 'mtd' | '30d' | 'quarter';
@@ -35,6 +36,9 @@ export default function DashboardPro() {
   // Feature flag for UI V2 - default enabled in dev, controllable via env var
   const uiV2Enabled = process.env.NEXT_PUBLIC_UI_V2 === "1" || 
     (process.env.NEXT_PUBLIC_UI_V2 !== "0" && process.env.NODE_ENV !== "production");
+    
+  // Phase 2 UI Polish feature flag
+  const isPhase2 = uiPolishPhase2();
 
   useEffect(() => {
     // Fetch dashboard data
@@ -222,9 +226,15 @@ export default function DashboardPro() {
                         className="h-full rounded-lg transition-all duration-500"
                         style={{
                           width: `${(item.value / item.max) * 100}%`,
-                          background: 'hsl(196 100% 80% / 0.22)',
-                          border: '1px solid hsl(196 100% 80% / 0.85)',
-                          boxShadow: '0 0 8px hsl(196 100% 80% / 0.3)'
+                          background: isPhase2 
+                            ? `rgba(var(--phase2-brand-500), 0.28)` 
+                            : 'hsl(196 100% 80% / 0.22)',
+                          border: isPhase2
+                            ? `1.75px solid rgba(var(--phase2-brand-500), 0.90)`
+                            : '1px solid hsl(196 100% 80% / 0.85)',
+                          boxShadow: isPhase2
+                            ? '0 0 8px rgba(var(--phase2-brand-500), 0.35)'
+                            : '0 0 8px hsl(196 100% 80% / 0.3)'
                         }}
                       />
                     </div>
@@ -245,10 +255,16 @@ export default function DashboardPro() {
                         className="w-full rounded-t-lg transition-all duration-500"
                         style={{ 
                           height: `${Math.max(2, (value / 200) * 80)}px`,
-                          background: value > 0 ? 'hsl(258 90% 66% / 0.22)' : 'hsl(var(--stroke) / 0.3)',
-                          border: value > 0 ? '1px solid hsl(258 90% 66% / 0.85)' : '1px solid hsl(var(--stroke) / 0.5)',
+                          background: value > 0 
+                            ? (isPhase2 ? `rgba(var(--phase2-accent-600), 0.22)` : 'hsl(258 90% 66% / 0.22)')
+                            : (isPhase2 ? `rgba(var(--phase2-border-1), 0.14)` : 'hsl(var(--stroke) / 0.3)'),
+                          border: value > 0 
+                            ? (isPhase2 ? `1.75px solid rgba(var(--phase2-accent-600), 0.85)` : '1px solid hsl(258 90% 66% / 0.85)')
+                            : (isPhase2 ? `1px solid rgba(var(--phase2-border-1), 0.5)` : '1px solid hsl(var(--stroke) / 0.5)'),
                           opacity: value === 0 ? 0.3 : 1,
-                          boxShadow: value > 50 ? '0 0 8px hsl(258 90% 66% / 0.25)' : 'none'
+                          boxShadow: value > 50 
+                            ? (isPhase2 ? '0 0 8px rgba(var(--phase2-accent-600), 0.35)' : '0 0 8px hsl(258 90% 66% / 0.25)')
+                            : 'none'
                         }}
                       />
                     </div>

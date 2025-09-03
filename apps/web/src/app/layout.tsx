@@ -1,6 +1,7 @@
 import TopNav from './components/TopNav';
 import type { Metadata } from "next";
 import { Inter, Roboto } from "next/font/google";
+import { uiPolishPhase2 } from '@/lib/flags';
 import "./globals.css";
 
 const inter = Inter({
@@ -26,10 +27,23 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isPhase2 = uiPolishPhase2();
+  
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${roboto.variable} antialiased min-h-screen bg-bg0 text-txt1 bg-grad-1`}>
-        <div className="fixed inset-0 bg-grad-hero" aria-hidden />
+      <body 
+        className={`${inter.variable} ${roboto.variable} antialiased min-h-screen`}
+        style={{
+          backgroundColor: isPhase2 ? 'rgb(var(--phase2-bg-0))' : 'var(--background-app)',
+          color: isPhase2 ? 'rgb(var(--phase2-fg-0))' : 'var(--text-primary)'
+        }}
+      >
+        {/* Phase 2: Refined gradient system */}
+        {isPhase2 && <div className="drift-gradient" aria-hidden />}
+        
+        {/* Phase 1: Legacy gradient system */}
+        {!isPhase2 && <div className="fixed inset-0 bg-grad-hero" aria-hidden />}
+        
         <div className="relative z-10">
           <TopNav />
           <main className="mx-auto max-w-[1320px] px-6 py-8">{children}</main>
