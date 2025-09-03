@@ -80,3 +80,72 @@ h1, h2, h3, h4, h5, h6 {
     text-wrap: balance;
   }
 }
+
+/* Design System V1 - Universal tokens */
+:root {
+  /* Neutrals & Base */
+  --bg-void: 240 23% 6%;
+  --bg-elev-1: 245 22% 10%;
+  --bg-elev-2: 248 22% 13%;
+  --panel: 245 20% 14%;
+  --panel-opaque: 245 20% 16%;
+  --stroke: 250 15% 30%;
+  --text-1: 0 0% 100%;
+  --text-2: 220 10% 75%;
+  --text-3: 220 8% 55%;
+  --muted: 220 6% 45%;
+
+  /* Brand */
+  --violet-600: 268 83% 67%;
+  --violet-700: 266 77% 60%;
+  --purple-500: 257 80% 64%;
+  --iris-400: 245 90% 70%;
+  --indigo-500: 232 88% 64%;
+  --cyan-400: 191 94% 67%;
+  --teal-400: 170 70% 55%;
+
+  /* Status */
+  --success: 153 60% 47%;
+  --warning: 38 92% 60%;
+  --error: 0 84% 63%;
+  --info: 205 90% 62%;
+
+  /* FX */
+  --glow-cyan: 191 100% 70%;
+  --glow-violet: 268 100% 72%;
+  --glow-iris: 245 100% 74%;
+}
+
+/* Util helpers */
+.bg-void { background-color: hsl(var(--bg-void)); }
+.text-1  { color: hsl(var(--text-1)); }
+.text-2  { color: hsl(var(--text-2)); }
+.text-3  { color: hsl(var(--text-3)); }
+.border-stroke { border-color: hsl(var(--stroke)); }
+
+/* Glass card */
+.card-glass {
+  background: color-mix(in oklab, hsl(var(--panel)) 82%, transparent);
+  border: 1px solid hsl(var(--stroke) / 0.35);
+  backdrop-filter: blur(14px) saturate(120%);
+  box-shadow: 0 10px 30px hsl(0 0% 0% / 0.45), 0 0 0 1px hsl(0 0% 100% / 0.02) inset;
+  border-radius: 16px;
+}
+
+/* Glows */
+.glow-cyan   { box-shadow: 0 0 0 1px hsl(var(--cyan-400) / .35), 0 0 24px hsl(var(--glow-cyan) / .25); }
+.glow-violet { box-shadow: 0 0 0 1px hsl(var(--violet-600) / .35), 0 0 24px hsl(var(--glow-violet) / .25); }
+
+/* Gradient surfaces */
+.surface-hero { 
+  background: linear-gradient(180deg, hsl(var(--violet-700)) 0%, hsl(var(--indigo-500)) 60%, hsl(var(--panel)) 100%);
+}
+.btn-gradient {
+  background: linear-gradient(90deg, hsl(var(--purple-500)), hsl(var(--cyan-400)));
+  color: hsl(var(--text-1));
+  border: 1px solid hsl(var(--stroke) / .3);
+}
+.btn-gradient:hover { filter: brightness(1.05); }
+
+/* Typography utilities */
+.tnum { font-feature-settings: "tnum" 1; }

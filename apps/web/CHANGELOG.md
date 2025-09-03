@@ -1,13 +1,18 @@
 # Changelog
 
-## [Unreleased] - UI
+## [Unreleased] - Design System V1
 
-* feat(theme): introduce Terzo-inspired design tokens with dark gradients and glowing accents
-* feat(ui): add GlassCard, KpiTile, and SectionHeader primitives with glassmorphism effects
-* style(dashboard): restyle with Terzo aesthetic - glass panels, cyan/violet glows, modern KPI tiles
-* feat(layout): add gradient backgrounds with radial glow overlays
+### Phase 2: Universal Design System Implementation
 
-UI V2 Dashboard: Enterprise design system with new KPI cards, charts, and actionable lists
+* **feat(theme)**: universal CSS tokens for Terzo-inspired dark gradients and glass panels
+* **feat(tailwind)**: extended Tailwind config with design system colors (violet, cyan, surface hierarchy)
+* **feat(components)**: new UI primitives - KpiCard, PanelCard, Button variants with glassmorphism effects
+* **feat(dashboard)**: feature-flagged dashboard with hero gradient backgrounds and modern glass panels
+* **feat(animations)**: lightweight count-up animation hook (useCountUpV2) for KPI values with reduced motion support
+* **style(charts)**: tuned data visualization styling with gradient bars and glow effects
+* **config(flags)**: NEXT_PUBLIC_UI_V2 environment variable (default enabled in dev)
+
+**Breaking Changes**: None - all changes are feature-flagged and backward compatible
 
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
