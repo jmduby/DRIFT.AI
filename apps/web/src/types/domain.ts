@@ -1,0 +1,6 @@
+export type UUID = string;
+export type Vendor = { id: UUID; primary_name: string; dba?: string|null; category?: string|null; account_numbers?: string[]; aka?: string[]; contract_terms?: { item: string; qty?: number|null; unit_price?: number|null; amount?: number|null; date?: string|null; }[]; effective_date?: string|null; end_date?: string|null; };
+export type LineItem = { item: string; qty?: number|null; unit_price?: number|null; amount?: number|null; date?: string|null; };
+export type Mismatch = { kind:'overbilling'|'missing_item'|'wrong_date'|'other'; description:string; invoice_ref?:string|null; contract_ref?:string|null; };
+export type VendorMatch = { vendorId: UUID|null; score: number; method:'name_similarity'|'account_number'|'manual'; candidates?: { vendorId: UUID; label: string; score: number; }[]; };
+export type Invoice = { id: UUID; vendorId: UUID|null; uploadedAt: string; period?: string|null; fileName: string; amounts: { subtotal?: number|null; surcharge?: number|null; totalCurrentCharges: number; totalDue?: number|null; }; lines: LineItem[]; mismatches: Mismatch[]; match: VendorMatch; };
