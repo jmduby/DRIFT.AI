@@ -35,20 +35,24 @@ export default function InvoiceUploader({ className = '' }: InvoiceUploaderProps
         body: formData,
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Upload failed');
+      const result = await response.json();
+
+      // Handle duplicate detection (409 status)
+      if (response.status === 409 && result.duplicate) {
+        // Show duplicate banner and redirect to existing invoice
+        setError(`${result.message} Opening existing report.`);
+        setTimeout(() => {
+          router.push(`/invoice/${result.invoiceId}`);
+        }, 2000);
+        return;
       }
 
-      const result = await response.json();
-      
-      // Navigate to results page - check if vendor matched
-      if (result.vendorId) {
-        router.push(`/vendors/${result.vendorId}/invoices/${result.invoiceId}`);
-      } else {
-        // Unmatched vendor case - redirect to unmatched route
-        router.push(`/vendors/unmatched/invoices/${result.invoiceId}`);
+      if (!response.ok) {
+        throw new Error(result.error || 'Upload failed');
       }
+      
+      // Navigate to new invoice details page
+      router.push(`/invoice/${result.invoiceId}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Upload failed');
     } finally {
@@ -90,7 +94,14 @@ export default function InvoiceUploader({ className = '' }: InvoiceUploaderProps
   return (
     <div className={className}>
       {error && (
-        <div className="mb-4 p-4 rounded-lg" style={{ backgroundColor: '#FEE2E2', color: '#DC2626' }}>
+        <div 
+          className="mb-4 p-4 rounded-lg" 
+          style={{ 
+            backgroundColor: error.includes('duplicate') ? '#FEF3C7' : '#FEE2E2', 
+            color: error.includes('duplicate') ? '#92400E' : '#DC2626' 
+          }}
+          data-testid={error.includes('duplicate') ? 'duplicate-banner' : 'error-banner'}
+        >
           {error}
         </div>
       )}

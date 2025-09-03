@@ -653,5 +653,54 @@
         }
       ]
     }
+  },
+  {
+    "id": "e9275929-3ca2-4379-a7c9-84ff1cb06673",
+    "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+    "uploadedAt": "2025-09-03T14:10:15.220Z",
+    "period": "2025-09",
+    "fileName": "Rumpke_-_Complete_with_DocuSign_48-_HELMWOOD.pdf",
+    "amounts": {
+      "subtotal": null,
+      "surcharge": null,
+      "totalCurrentCharges": 707.14,
+      "totalDue": 707.14
+    },
+    "lines": [
+      {
+        "item": "8 YARD FRONT LOAD",
+        "qty": 1,
+        "unit_price": 600,
+        "amount": 600,
+        "date": "1/21/2025"
+      },
+      {
+        "item": "6 YARD FRONT LOAD",
+        "qty": 1,
+        "unit_price": 107.14,
+        "amount": 107.14,
+        "date": "1/21/2025"
+      }
+    ],
+    "mismatches": [
+      {
+        "kind": "overbilling",
+        "description": "The expected total does not align with the sum of line items. Expected total is 707.14 but the original total should reflect this value instead of any higher amount if applicable.",
+        "invoice_ref": null,
+        "contract_ref": "20250121JM-1"
+      }
+    ],
+    "match": {
+      "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+      "score": 1,
+      "method": "name_similarity",
+      "candidates": [
+        {
+          "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+          "label": "RUMPKE OF KENTUCKY, INC",
+          "score": 1
+        }
+      ]
+    }
   }
 ]

@@ -1,20 +1,22 @@
 import Link from 'next/link';
 import { formatUSD } from '@/lib/format';
-import { listVendors, listInvoices, getCurrentMonth } from '@/server/store';
+import { listVendors, getCurrentMonth } from '@/server/store';
+import { listInvoices } from '@/server/invoiceStore';
 import InvoiceUploader from '@/app/_components/InvoiceUploader';
 
 export default async function Dashboard() {
   const currentMonth = getCurrentMonth();
   
-  // Get all vendors and invoices
+  // Get all vendors and invoices (excluding deleted)
   const [vendors, allInvoices] = await Promise.all([
     listVendors(),
-    listInvoices()
+    listInvoices({ includeDeleted: false })
   ]);
 
-  // Filter invoices for current month (by upload date)
+  // Filter invoices for current month (by creation date)
   const monthlyInvoices = allInvoices.filter(invoice => {
-    const uploadMonth = invoice.uploadedAt.slice(0, 7); // YYYY-MM
+    if (!invoice.createdAt) return false; // Skip if no creation date
+    const uploadMonth = invoice.createdAt.slice(0, 7); // YYYY-MM
     return uploadMonth === currentMonth;
   });
 
@@ -27,30 +29,23 @@ export default async function Dashboard() {
   // Calculate KPIs
   const totalActiveVendors = vendors.length;
   
-  // Calculate total drift from overbilling mismatches
+  // Calculate total drift from invoice drift field
   const totalDriftMTD = monthlyInvoices.reduce((sum, invoice) => {
-    const overbillingAmount = invoice.mismatches
-      .filter(m => m.kind === 'overbilling')
-      .reduce((mismatchSum) => {
-        // Estimate 10% of invoice total for overbilling
-        return mismatchSum + (invoice.amounts.totalCurrentCharges * 0.1);
-      }, 0);
-    return sum + overbillingAmount;
+    return sum + (invoice.drift || 0);
   }, 0);
   
   const invoicesProcessedMTD = monthlyInvoices.length;
 
   // Get recent activity (last 5 invoices)
   const recentActivity = allInvoices
-    .sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime())
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 5)
     .map(invoice => ({
       id: invoice.id,
-      vendorName: invoice.vendorId ? 
-        (vendorMap.get(invoice.vendorId) || 'Unknown vendor') : 
-        'Unmatched',
-      uploadedAt: invoice.uploadedAt,
-      amount: invoice.amounts.totalCurrentCharges,
+      vendorName: invoice.vendorName || 
+        (invoice.vendorId ? (vendorMap.get(invoice.vendorId) || 'Unknown vendor') : 'Unmatched'),
+      uploadedAt: invoice.createdAt,
+      amount: invoice.total || 0,
       vendorId: invoice.vendorId
     }));
 
@@ -74,8 +69,8 @@ export default async function Dashboard() {
   };
 
   const handleRecentClick = (item: { vendorId?: string; id: string }) => {
-    const vendorSegment = item.vendorId || 'unmatched';
-    return `/vendors/${vendorSegment}/invoices/${item.id}`;
+    // Link to new invoice details page
+    return `/invoice/${item.id}`;
   };
 
   return (

@@ -1,0 +1,53 @@
+{
+  "id": "01K47YKXHT0BDRYZKH7TMPRQSY",
+  "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+  "vendorName": "RUMPKE OF KENTUCKY, INC",
+  "period": "2025-09",
+  "total": 707.14,
+  "drift": 0,
+  "fileHash": "d41b3a2197519b730cd7403742fec6f3752aa621095bf7d90de231cd1e9d3619",
+  "textHash": "420954f69e3771c0d3a87121d0675feac5a2063839c21d4713a0d1d1b4ae586e",
+  "fileName": "Rumpke_-_Complete_with_DocuSign_48-_HELMWOOD.pdf",
+  "number": null,
+  "createdAt": "2025-09-03T14:10:15.228Z",
+  "result": {
+    "invoice_lines": [
+      {
+        "item": "8 YARD FRONT LOAD",
+        "qty": 1,
+        "unit_price": 600,
+        "amount": 600,
+        "date": "1/21/2025"
+      },
+      {
+        "item": "6 YARD FRONT LOAD",
+        "qty": 1,
+        "unit_price": 107.14,
+        "amount": 107.14,
+        "date": "1/21/2025"
+      }
+    ],
+    "mismatches": [
+      {
+        "kind": "overbilling",
+        "description": "The expected total does not align with the sum of line items. Expected total is 707.14 but the original total should reflect this value instead of any higher amount if applicable.",
+        "invoice_ref": null,
+        "contract_ref": "20250121JM-1"
+      }
+    ],
+    "summary": "The invoice includes two line items, an 8-yard front load service and a 6-yard front load service, both dated 1/21/2025. The correct total for these services should be 707.14. There is a noted overbilling issue based on implied expected amounts.",
+    "match": {
+      "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+      "score": 1,
+      "method": "name_similarity",
+      "candidates": [
+        {
+          "vendorId": "01K46BS1TW9CMKN7C9AXKX5DKE",
+          "label": "RUMPKE OF KENTUCKY, INC",
+          "score": 1
+        }
+      ]
+    }
+  },
+  "deletedAt": "2025-09-03T14:10:24.502Z"
+}

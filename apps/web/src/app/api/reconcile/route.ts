@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { extractText, PDFTextExtractionError } from '@/lib/pdf/extractText';
 import { matchVendor } from '@/lib/match/vendorMatcher';
 import { createInvoice, getVendor, inferPeriodFromText } from '@/server/store';
+import { findByHash, findLikelyDuplicate, saveInvoice } from '@/server/invoiceStore';
+import { sha256, sha256Text, normalizeTextForHash } from '@/server/hash';
 import { randomUUID } from 'crypto';
+import { ulid } from 'ulid';
 import type { Invoice, LineItem, Mismatch, VendorMatch } from '@/types/domain';
 
 export const runtime = 'nodejs';
@@ -111,6 +114,26 @@ export async function POST(request: NextRequest) {
         { error: 'Internal error processing PDF. Please try again.' },
         { status: 500 }
       );
+    }
+
+    // Compute hashes for duplicate detection
+    const fileHash = await sha256(arrayBuffer);
+    const textHash = await sha256Text(normalizeTextForHash(pdfText || ''));
+
+    // Check for duplicates before processing
+    const existing = await findByHash({ fileHash, textHash });
+    if (existing) {
+      console.info('[event] invoice.duplicate_detected', { 
+        id: existing.id, 
+        vendorId: existing.vendorId, 
+        total: existing.total 
+      });
+      
+      return NextResponse.json({
+        duplicate: true,
+        invoiceId: existing.id,
+        message: 'Duplicate invoice detected. Showing existing analysis.',
+      }, { status: 409 });
     }
 
     // Match vendor using existing matcher
@@ -247,32 +270,77 @@ Provide a summary of key findings and total amounts.`;
     
     // Compute amounts
     const totalCurrentCharges = computeTotalFromLines(lines);
+    const period = inferPeriodFromText(pdfText);
     
-    // Create Invoice record
+    // Extract invoice number from AI response if available
+    const invoiceNumber = lines.find(line => line.item.toLowerCase().includes('invoice'))?.item || null;
+    
+    // Check for likely duplicate by number/period before creating
+    if (invoiceNumber && period) {
+      const likelyDuplicate = await findLikelyDuplicate(invoiceNumber, period);
+      if (likelyDuplicate) {
+        return NextResponse.json({
+          duplicate: true,
+          invoiceId: likelyDuplicate.id,
+          message: `Likely duplicate detected for invoice ${invoiceNumber} in period ${period}.`,
+        }, { status: 409 });
+      }
+    }
+    
+    // Create Invoice record (existing format)
     const invoice: Invoice = {
       id: randomUUID(),
       vendorId: vendorMatch.vendorId,
       uploadedAt: new Date().toISOString(),
-      period: inferPeriodFromText(pdfText),
+      period,
       fileName: file.name,
       amounts: {
         subtotal: null,
         surcharge: null,
         totalCurrentCharges,
-        totalDue: totalCurrentCharges, // Could be parsed from PDF later
+        totalDue: totalCurrentCharges,
       },
       lines,
       mismatches,
       match: vendorMatch,
     };
 
-    // Persist invoice
+    // Persist invoice (existing system)
     const createdInvoice = await createInvoice(invoice);
+    
+    // Also persist to new invoice store with hash data
+    const invoiceId = ulid();
+    await saveInvoice({
+      id: invoiceId,
+      vendorId: vendorMatch.vendorId,
+      vendorName: vendorMatch.vendorId ? (await getVendor(vendorMatch.vendorId))?.primary_name : undefined,
+      period,
+      total: totalCurrentCharges,
+      drift: 0, // TODO: compute drift from contract comparison
+      fileHash,
+      textHash,
+      fileName: file.name,
+      number: invoiceNumber,
+      createdAt: new Date().toISOString(),
+      result: {
+        invoice_lines: lines,
+        mismatches,
+        summary: aiResponse.summary,
+        match: vendorMatch,
+      }
+    });
+
+    // Log upload event
+    console.info('[event] invoice.uploaded', { 
+      id: invoiceId, 
+      vendorId: vendorMatch.vendorId, 
+      total: totalCurrentCharges 
+    });
 
     // Return response with IDs for redirect
     return NextResponse.json({
-      invoiceId: createdInvoice.id,
-      vendorId: createdInvoice.vendorId,
+      invoiceId: invoiceId,  // Use new invoice store ID
+      vendorId: vendorMatch.vendorId,
       lines,
       mismatches,
       match: vendorMatch,
