@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { extractText, PDFTextExtractionError } from '@/lib/pdf/extractText';
 import { matchVendor } from '@/lib/match/vendorMatcher';
+import { matchInvoiceVendor } from '@/lib/matching/vendorMatcher';
 import { createInvoice, getVendor, inferPeriodFromText } from '@/server/store';
 import { findByHash, findLikelyDuplicate, saveInvoice } from '@/server/invoiceStore';
 import { sha256, sha256Text, normalizeTextForHash } from '@/server/hash';
+import { domainFromEmailOrUrl } from '@/lib/matching/normalization';
 import { randomUUID } from 'crypto';
 import { ulid } from 'ulid';
-import type { Invoice, LineItem, Mismatch, VendorMatch } from '@/types/domain';
+import type { Invoice, LineItem, Mismatch, VendorMatch, ParsedInvoiceData } from '@/types/domain';
 
 export const runtime = 'nodejs';
 
@@ -136,31 +138,89 @@ export async function POST(request: NextRequest) {
       }, { status: 409 });
     }
 
-    // Match vendor using existing matcher
-    const matchResult = await matchVendor(pdfText);
-    
-    // Create VendorMatch object
-    const vendorMatch: VendorMatch = {
-      vendorId: null,
-      score: matchResult.score,
-      method: 'name_similarity',
-      candidates: matchResult.candidates.slice(0, 3).map(c => ({
-        vendorId: c.id,
-        label: c.name,
-        score: c.score
-      }))
-    };
-
-    // Auto-match if score >= 0.70
-    if (matchResult.score >= 0.70 && matchResult.candidates.length > 0) {
-      vendorMatch.vendorId = matchResult.candidates[0].id;
-    }
-
-    // Call OpenAI for invoice analysis
+    // First extract basic invoice data with AI for improved matching
     const { default: OpenAI } = await import('openai');
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
+
+    // Extract vendor and amount info first
+    const extractionCompletion = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [
+        {
+          role: 'system',
+          content: 'Extract vendor information and amounts from this invoice. Be precise with numerical values.',
+        },
+        {
+          role: 'user',
+          content: `Extract the vendor name, email, website, address, subtotal, tax, and total from this invoice text:\n\n${pdfText}`,
+        },
+      ],
+      response_format: {
+        type: 'json_schema',
+        json_schema: {
+          name: 'invoice_extraction',
+          strict: true,
+          schema: {
+            type: 'object',
+            properties: {
+              vendor_name: { type: ['string', 'null'] },
+              email: { type: ['string', 'null'] },
+              website: { type: ['string', 'null'] },
+              address: {
+                type: ['object', 'null'],
+                properties: {
+                  street: { type: ['string', 'null'] },
+                  city: { type: ['string', 'null'] },
+                  state: { type: ['string', 'null'] },
+                  zip: { type: ['string', 'null'] },
+                },
+                additionalProperties: false,
+              },
+              subtotal: { type: ['number', 'null'] },
+              tax: { type: ['number', 'null'] },
+              total: { type: 'number' },
+            },
+            required: ['vendor_name', 'email', 'website', 'address', 'subtotal', 'tax', 'total'],
+            additionalProperties: false,
+          },
+        },
+      },
+    });
+
+    const extractionContent = extractionCompletion.choices[0]?.message?.content;
+    if (!extractionContent) {
+      throw new Error('No extraction response from OpenAI');
+    }
+
+    const extractedData = JSON.parse(extractionContent);
+    
+    // Build parsed invoice data for matching
+    const parsedData: ParsedInvoiceData = {
+      vendorName: extractedData.vendor_name,
+      email: extractedData.email,
+      url: extractedData.website,
+      address: extractedData.address,
+      linesText: pdfText, // Full text for contract hints
+      subtotal: extractedData.subtotal,
+      tax: extractedData.tax,
+      total: extractedData.total,
+    };
+
+    // Use new enhanced matching system
+    const newMatchResult = await matchInvoiceVendor(parsedData);
+    
+    // Create VendorMatch object with enhanced data
+    const vendorMatch: VendorMatch = {
+      vendorId: newMatchResult.vendorId,
+      score: newMatchResult.score,
+      method: newMatchResult.method,
+      candidates: newMatchResult.candidates,
+      status: newMatchResult.status
+    };
+
+    // Continue with line item analysis using same OpenAI client
 
     // Build system prompt with vendor context if matched
     let systemPrompt = `You are an invoice reconciliation expert. Analyze the provided document text and extract structured data.
@@ -287,22 +347,28 @@ Provide a summary of key findings and total amounts.`;
       }
     }
     
-    // Create Invoice record (existing format)
+    // Create Invoice record with enhanced data
     const invoice: Invoice = {
       id: randomUUID(),
       vendorId: vendorMatch.vendorId,
+      vendorName: parsedData.vendorName || undefined,
       uploadedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
       period,
       fileName: file.name,
       amounts: {
-        subtotal: null,
+        subtotal: parsedData.subtotal,
+        tax: parsedData.tax,
+        total: parsedData.total, // Authoritative amount
         surcharge: null,
-        totalCurrentCharges,
-        totalDue: totalCurrentCharges,
+        totalCurrentCharges: totalCurrentCharges, // Legacy computed amount
+        totalDue: parsedData.total,
       },
+      parsedData,
       lines,
       mismatches,
       match: vendorMatch,
+      drift: 0, // TODO: Compute drift from contract comparison
     };
 
     // Persist invoice (existing system)
@@ -315,7 +381,7 @@ Provide a summary of key findings and total amounts.`;
       vendorId: vendorMatch.vendorId,
       vendorName: vendorMatch.vendorId ? (await getVendor(vendorMatch.vendorId))?.primary_name : undefined,
       period,
-      total: totalCurrentCharges,
+      total: parsedData.total,
       drift: 0, // TODO: compute drift from contract comparison
       fileHash,
       textHash,

@@ -35,12 +35,12 @@ export function styleFoundation(): boolean {
 
 // Ingestion Status Strip - shows auto-ingest connection status
 export function ingestionStatus(): boolean {
-  if (typeof process === 'undefined') return true;
+  if (typeof process === 'undefined') return false;
   
   // Explicit enable/disable via env var
   if (process.env.NEXT_PUBLIC_INGESTION_STATUS === '1') return true;
   if (process.env.NEXT_PUBLIC_INGESTION_STATUS === '0') return false;
   
-  // Default: enabled
-  return true;
+  // Default: disabled
+  return false;
 }

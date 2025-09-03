@@ -1,0 +1,38 @@
+{
+  "id": "01K48NPNM54G3XHPR649EMV50V",
+  "vendorId": null,
+  "period": "2025-09",
+  "total": 2500,
+  "drift": 0,
+  "fileHash": "22c8a713c704c5fae742bab5d6411a684bc97643719538631462444ef45ade3c",
+  "textHash": "fc7604dd0e818316685752aa779de00870fe9198a18bdc05871d35ff807872ff",
+  "fileName": "Invoice_IN10137_from_wwwevolvedesigngroup.pdf",
+  "number": null,
+  "createdAt": "2025-09-03T20:53:42.661Z",
+  "result": {
+    "invoice_lines": [
+      {
+        "item": "Balance for Design Development phase As per contract for resident floors",
+        "qty": 1,
+        "unit_price": 2500,
+        "amount": 2500,
+        "date": "06/16/2025"
+      }
+    ],
+    "mismatches": [
+      {
+        "kind": "overbilling",
+        "description": "Total amount exceeds expected subtotal plus sales tax",
+        "invoice_ref": "I N - 1 0 1 3 7",
+        "contract_ref": null
+      }
+    ],
+    "summary": "Invoice total of $2,715.63 includes a design development balance of $2,500.00 plus sales tax of $215.63, which appears to indicate overbilling due to the mismatch in expected total.",
+    "match": {
+      "vendorId": null,
+      "score": 0,
+      "method": "name_similarity",
+      "candidates": []
+    }
+  }
+}

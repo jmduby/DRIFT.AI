@@ -8,6 +8,7 @@ import Section from '@/components/invoices/Section';
 import IssueCard from '@/components/invoices/IssueCard';
 import IssuesSummaryBar from '@/components/invoices/IssuesSummaryBar';
 import KeyValueCard from '@/components/invoices/KeyValueCard';
+import InvoicePageClient from './InvoicePageClient';
 import { transformMismatchesToIssues, calculateDriftFromIssues, getVendorMatchBadge } from '@/components/invoices/utils';
 import { countIssuesBySeverity, sortIssuesBySeverity } from '@/components/invoices/types';
 import { styleFoundation } from '@/lib/flags';
@@ -31,6 +32,10 @@ export default async function InvoicePage({ params }: Props) {
   const sortedIssues = sortIssuesBySeverity(issues);
   const issueCounts = countIssuesBySeverity(issues);
   const driftCents = calculateDriftFromIssues(issues);
+  
+  // Check if invoice is unmatched and has candidates
+  const isUnmatched = invoice.result.match?.status === 'unmatched' && !invoice.vendorId;
+  const matchCandidates = invoice.result.match?.candidates || [];
 
   return (
     <div className={`min-h-screen p-8 ${
@@ -97,15 +102,31 @@ export default async function InvoicePage({ params }: Props) {
           <DeleteButton invoiceId={invoice.id} />
         </div>
 
-        {/* Issues Section */}
-        <Section 
-          title="Issues" 
-          subtitle={issues.length > 0 ? `${issues.length} issue${issues.length !== 1 ? 's' : ''} found` : "No issues detected"}
-        >
+        {/* Issues Section - Elevated and Full Width */}
+        <div className={`w-full p-6 rounded-xl shadow-lg ${
+          isStyleFoundation 
+            ? 'bg-[linear-gradient(135deg,hsl(var(--surface-1))_0%,hsl(var(--surface-2))_100%)] border border-[hsl(240_8%_18%_/_0.3)] shadow-elev-3' 
+            : 'bg-gradient-to-br from-zinc-800 to-zinc-900 border border-zinc-700'
+        }`}>
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className={`text-xl font-semibold ${
+                isStyleFoundation ? 'text-text-1 font-inter' : 'text-white font-inter'
+              }`}>
+                Issues Found
+              </h2>
+              <p className={`${
+                isStyleFoundation ? 'text-text-2' : 'text-gray-400'
+              }`}>
+                {issues.length > 0 ? `${issues.length} issue${issues.length !== 1 ? 's' : ''} detected` : "No issues detected"}
+              </p>
+            </div>
+          </div>
+          
           {issues.length > 0 ? (
             <>
               <IssuesSummaryBar counts={issueCounts} driftCents={driftCents} />
-              <div className="space-y-4" data-testid="issues-found">
+              <div className="space-y-4 mt-6" data-testid="issues-found">
                 {sortedIssues.map((issue) => (
                   <IssueCard key={issue.id} {...issue} />
                 ))}
@@ -128,7 +149,14 @@ export default async function InvoicePage({ params }: Props) {
               </p>
             </div>
           )}
-        </Section>
+        </div>
+
+        {/* Likely Match Card for Unmatched Invoices */}
+        <InvoicePageClient 
+          invoiceId={invoice.id}
+          isUnmatched={isUnmatched}
+          matchCandidates={matchCandidates}
+        />
 
         {/* Line Items Section */}
         {invoice.result.invoice_lines && invoice.result.invoice_lines.length > 0 && (
