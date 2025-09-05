@@ -7,6 +7,16 @@ export interface Issue {
   lineRef?: string;
   amountDeltaCents?: number;
   date?: string;
+  overbillingData?: {
+    expected_total: number;
+    invoice_total: number;
+    overbilling_total: number;
+    breakdown: {
+      unit_rate_delta: number;
+      fuel_surcharge_over_cap: number;
+      unauthorized_lines_total: number;
+    };
+  };
 }
 
 export interface InvoiceTotals {

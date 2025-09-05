@@ -16,6 +16,16 @@ interface IssueCardProps {
   date?: string;
   onIgnore?: () => void;
   onOpenContext?: (ref?: string) => void;
+  overbillingData?: {
+    expected_total: number;
+    invoice_total: number;
+    overbilling_total: number;
+    breakdown: {
+      unit_rate_delta: number;
+      fuel_surcharge_over_cap: number;
+      unauthorized_lines_total: number;
+    };
+  };
 }
 
 export default function IssueCard({
@@ -28,7 +38,8 @@ export default function IssueCard({
   amountDeltaCents,
   date,
   onIgnore,
-  onOpenContext
+  onOpenContext,
+  overbillingData
 }: IssueCardProps) {
   const [reviewed, setReviewed] = useState(false);
   const [ignored, setIgnored] = useState(false);
@@ -153,6 +164,30 @@ export default function IssueCard({
             }`}>
               <span className="font-medium">Suggestion: </span>
               {suggestion}
+            </div>
+          )}
+
+          {/* Overbilling Breakdown */}
+          {overbillingData && (
+            <div className={`text-sm p-3 rounded-lg border mb-3 ${
+              isStyleFoundation 
+                ? 'bg-white/5 border-white/10 text-text-2' 
+                : 'bg-[var(--background-surface-secondary)] border-[var(--background-surface-secondary)] text-[var(--text-secondary)]'
+            }`}>
+              <div className="font-medium mb-2 text-red-400">
+                Overbilling: ${overbillingData.overbilling_total.toFixed(2)}
+              </div>
+              <ul className="space-y-1 text-xs">
+                {overbillingData.breakdown.unit_rate_delta > 0 && (
+                  <li>• Unit rate variance: ${overbillingData.breakdown.unit_rate_delta.toFixed(2)}</li>
+                )}
+                {overbillingData.breakdown.fuel_surcharge_over_cap > 0 && (
+                  <li>• Fuel surcharge over cap: ${overbillingData.breakdown.fuel_surcharge_over_cap.toFixed(2)}</li>
+                )}
+                {overbillingData.breakdown.unauthorized_lines_total > 0 && (
+                  <li>• Unauthorized line items: ${overbillingData.breakdown.unauthorized_lines_total.toFixed(2)}</li>
+                )}
+              </ul>
             </div>
           )}
         </div>

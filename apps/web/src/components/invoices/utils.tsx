@@ -1,4 +1,5 @@
 import { Issue } from './types';
+import { findingKindLabel } from '@/lib/findingLabels';
 
 // Transform existing mismatch data to new Issue format
 interface MismatchData {
@@ -6,6 +7,75 @@ interface MismatchData {
   description: string;
   amount?: number;
   lineRef?: string;
+}
+
+// Enhanced issue with overbilling breakdown
+interface OverbillingData {
+  expected_total: number;
+  invoice_total: number;
+  overbilling_total: number;
+  breakdown: {
+    unit_rate_delta: number;
+    fuel_surcharge_over_cap: number;
+    unauthorized_lines_total: number;
+  };
+}
+
+interface EnhancedIssue extends Issue {
+  overbillingData?: OverbillingData;
+}
+
+// Aggregate overbilling-related issues into a single comprehensive issue
+export function aggregateOverbillingIssues(mismatches: MismatchData[], invoiceTotal: number, contractTotal?: number): Issue[] {
+  const overbillingTypes = ['overbilling', 'price_variance', 'missing_item', 'missing_expected_item'];
+  const overbillingMismatches = mismatches.filter(m => overbillingTypes.includes(m.kind));
+  const otherMismatches = mismatches.filter(m => !overbillingTypes.includes(m.kind));
+  
+  if (overbillingMismatches.length === 0) {
+    return transformMismatchesToIssues(mismatches);
+  }
+
+  // Calculate breakdown
+  const breakdown = {
+    unit_rate_delta: 0,
+    fuel_surcharge_over_cap: 0,
+    unauthorized_lines_total: 0,
+  };
+
+  overbillingMismatches.forEach(mismatch => {
+    const amount = mismatch.amount || 0;
+    
+    if (mismatch.kind === 'price_variance') {
+      breakdown.unit_rate_delta += amount;
+    } else if (mismatch.description?.toLowerCase().includes('fuel') || 
+               mismatch.description?.toLowerCase().includes('surcharge')) {
+      breakdown.fuel_surcharge_over_cap += amount;
+    } else if (mismatch.kind === 'missing_item' || mismatch.kind === 'missing_expected_item') {
+      breakdown.unauthorized_lines_total += amount;
+    }
+  });
+
+  const expected_total = contractTotal || (invoiceTotal - overbillingMismatches.reduce((sum, m) => sum + (m.amount || 0), 0));
+  const overbilling_total = Math.max(invoiceTotal - expected_total, 0);
+
+  const overbillingIssue: EnhancedIssue = {
+    id: 'overbilling-aggregate',
+    title: 'Potential Overbilling',
+    severity: overbilling_total > 0 ? 'high' : 'medium',
+    message: `Invoice total exceeds expected contract amount by $${overbilling_total.toFixed(2)}`,
+    suggestion: 'Review breakdown and verify against contract terms.',
+    amountDeltaCents: Math.round(overbilling_total * 100),
+    date: new Date().toISOString().split('T')[0],
+    overbillingData: {
+      expected_total,
+      invoice_total: invoiceTotal,
+      overbilling_total,
+      breakdown
+    }
+  };
+
+  const otherIssues = transformMismatchesToIssues(otherMismatches);
+  return overbilling_total > 0 ? [overbillingIssue, ...otherIssues] : otherIssues;
 }
 
 export function transformMismatchesToIssues(mismatches: MismatchData[]): Issue[] {
@@ -18,27 +88,28 @@ export function transformMismatchesToIssues(mismatches: MismatchData[]): Issue[]
     switch (mismatch.kind) {
       case 'overbilling':
         severity = 'critical';
-        title = 'Potential Overbilling Detected';
+        title = findingKindLabel('overbilling');
         suggestion = 'Review line items against contract terms to verify accuracy.';
         break;
       case 'missing_item':
+      case 'missing_expected_item':
         severity = 'high';
-        title = 'Missing Expected Item';
+        title = findingKindLabel('missing_item');
         suggestion = 'Check if this item should be included based on contract terms.';
         break;
       case 'wrong_date':
         severity = 'medium';
-        title = 'Date Discrepancy';
+        title = findingKindLabel('wrong_date');
         suggestion = 'Verify service dates match the billing period.';
         break;
       case 'price_variance':
         severity = 'high';
-        title = 'Price Variance Detected';
+        title = findingKindLabel('price_variance');
         suggestion = 'Compare unit prices with contracted rates.';
         break;
       default:
         severity = 'low';
-        title = 'General Issue';
+        title = findingKindLabel(mismatch.kind);
         break;
     }
 

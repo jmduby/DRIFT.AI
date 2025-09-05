@@ -1,14 +1,15 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { CheckCircle } from 'lucide-react';
-import { getInvoice } from '@/server/invoiceStore';
+import { getInvoice, checkAndAutoAttachVendor } from '@/server/invoiceStore';
 import { getVendor } from '@/server/store';
 import DeleteButton from './DeleteButton';
 import Section from '@/components/invoices/Section';
 import IssueCard from '@/components/invoices/IssueCard';
 import IssuesSummaryBar from '@/components/invoices/IssuesSummaryBar';
 import KeyValueCard from '@/components/invoices/KeyValueCard';
-import { transformMismatchesToIssues, calculateDriftFromIssues, getVendorMatchBadge } from '@/components/invoices/utils';
+import InvoicePageClient from './InvoicePageClient';
+import { transformMismatchesToIssues, aggregateOverbillingIssues, calculateDriftFromIssues, getVendorMatchBadge } from '@/components/invoices/utils';
 import { countIssuesBySeverity, sortIssuesBySeverity } from '@/components/invoices/types';
 import { styleFoundation } from '@/lib/flags';
 
@@ -23,55 +24,62 @@ export default async function InvoicePage({ params }: Props) {
     notFound();
   }
   
-  const vendor = invoice.vendorId ? await getVendor(invoice.vendorId) : null;
+  // Check for auto-attach opportunity for high-confidence matches
+  await checkAndAutoAttachVendor(params.id);
+  
+  // Re-fetch invoice after potential auto-attach
+  const updatedInvoice = await getInvoice(params.id);
+  const finalInvoice = updatedInvoice || invoice;
+  
+  const vendor = finalInvoice.vendorId ? await getVendor(finalInvoice.vendorId) : null;
   const isStyleFoundation = styleFoundation();
 
-  // Transform existing mismatch data to new issue format
-  const issues = transformMismatchesToIssues(invoice.result.mismatches || []);
+  // Transform existing mismatch data to new issue format with overbilling aggregation
+  const contractTotal = vendor?.contract_terms?.reduce((sum, term) => sum + (term.amount || 0), 0);
+  const issues = aggregateOverbillingIssues(
+    finalInvoice.result.mismatches || [], 
+    finalInvoice.total || 0, 
+    contractTotal
+  );
   const sortedIssues = sortIssuesBySeverity(issues);
   const issueCounts = countIssuesBySeverity(issues);
   const driftCents = calculateDriftFromIssues(issues);
 
   return (
-    <div className={`min-h-screen p-8 ${
-      isStyleFoundation ? '' : 'bg-zinc-950 text-white'
-    }`} style={!isStyleFoundation ? {} : { backgroundColor: 'var(--background-app)' }}>
-      <div className="max-w-7xl mx-auto space-y-8">
+    <>
+      {/* Full viewport background overlay */}
+      <div className="fixed inset-0 bg-app-gradient -z-10" />
+      
+      <div className="relative text-ink-1 min-h-screen">
+        <div className="px-6 py-8 space-y-6">
+          <div className="max-w-7xl mx-auto space-y-8">
         {/* Breadcrumbs */}
-        <nav className={`flex items-center gap-2 text-sm font-roboto ${
-          isStyleFoundation ? 'text-text-2' : 'text-gray-400'
-        }`}>
-          <Link href="/" className={`hover:underline ${
-            isStyleFoundation ? 'text-accent-400' : 'text-blue-400'
-          }`}>
+        <nav className="flex items-center gap-2 text-sm text-secondary">
+          <Link href="/" className="hover:underline text-accent-blue">
             Dashboard
           </Link>
           <span>→</span>
           {vendor ? (
             <>
-              <Link href="/vendors" className={`hover:underline ${
-                isStyleFoundation ? 'text-accent-400' : 'text-blue-400'
-              }`}>
+              <Link href="/vendors" className="hover:underline text-accent-blue">
                 Vendors
               </Link>
               <span>→</span>
-              <Link href={`/vendors/${vendor.id}`} className={`hover:underline ${
-                isStyleFoundation ? 'text-accent-400' : 'text-blue-400'
-              }`}>
+              <Link href={`/vendors/${vendor.id}`} className="hover:underline text-accent-blue">
                 {vendor.primary_name}
               </Link>
               <span>→</span>
-              <span className={isStyleFoundation ? 'text-text-1' : 'text-white'}>
+              <span className="text-primary">
                 Invoice
               </span>
             </>
           ) : (
             <>
-              <span className={isStyleFoundation ? 'text-text-2' : 'text-gray-400'}>
+              <span className="text-secondary">
                 Unmatched
               </span>
               <span>→</span>
-              <span className={isStyleFoundation ? 'text-text-1' : 'text-white'}>
+              <span className="text-primary">
                 Invoice
               </span>
             </>
@@ -81,31 +89,35 @@ export default async function InvoicePage({ params }: Props) {
         {/* Page Title */}
         <div className="flex justify-between items-start mb-8">
           <div>
-            <h1 className={`text-3xl font-bold mb-2 ${
-              isStyleFoundation ? 'text-text-1 font-inter' : 'text-white font-inter'
-            }`}>
+            <h1 className="text-3xl font-semibold text-primary mb-2">
               Invoice Details
             </h1>
-            <p className={`${
-              isStyleFoundation ? 'text-text-2' : 'text-gray-400'
-            }`}>
-              {invoice.fileName} • Uploaded {new Date(invoice.createdAt).toLocaleDateString()}
+            <p className="text-secondary">
+              {finalInvoice.fileName} • Uploaded {new Date(finalInvoice.createdAt).toLocaleDateString()}
             </p>
           </div>
           
           {/* Delete Button */}
-          <DeleteButton invoiceId={invoice.id} />
+          <DeleteButton invoiceId={finalInvoice.id} />
         </div>
 
-        {/* Issues Section */}
-        <Section 
-          title="Issues" 
-          subtitle={issues.length > 0 ? `${issues.length} issue${issues.length !== 1 ? 's' : ''} found` : "No issues detected"}
-        >
+        {/* Issues Section - Elevated and Full Width */}
+        <div className="card-glass p-6 w-full">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl font-semibold text-primary">
+                Issues Found
+              </h2>
+              <p className="text-secondary">
+                {issues.length > 0 ? `${issues.length} issue${issues.length !== 1 ? 's' : ''} detected` : "No issues detected"}
+              </p>
+            </div>
+          </div>
+          
           {issues.length > 0 ? (
             <>
               <IssuesSummaryBar counts={issueCounts} driftCents={driftCents} />
-              <div className="space-y-4" data-testid="issues-found">
+              <div className="space-y-4 mt-6" data-testid="issues-found">
                 {sortedIssues.map((issue) => (
                   <IssueCard key={issue.id} {...issue} />
                 ))}
@@ -128,11 +140,19 @@ export default async function InvoicePage({ params }: Props) {
               </p>
             </div>
           )}
-        </Section>
+        </div>
+
+        {/* Change Vendor Section */}
+        <InvoicePageClient 
+          invoiceId={finalInvoice.id}
+          currentVendorId={finalInvoice.vendorId}
+          vendorName={vendor?.primary_name}
+          showChangeButton={true}
+        />
 
         {/* Line Items Section */}
-        {invoice.result.invoice_lines && invoice.result.invoice_lines.length > 0 && (
-          <Section title="Line Items" subtitle={`${invoice.result.invoice_lines.length} items`}>
+        {finalInvoice.result.invoice_lines && finalInvoice.result.invoice_lines.length > 0 && (
+          <Section title="Line Items" subtitle={`${finalInvoice.result.invoice_lines.length} items`}>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="sticky top-0 z-10">
@@ -169,7 +189,7 @@ export default async function InvoicePage({ params }: Props) {
                   </tr>
                 </thead>
                 <tbody>
-                  {invoice.result.invoice_lines.map((line, index) => (
+                  {finalInvoice.result.invoice_lines.map((line, index) => (
                     <tr 
                       key={index} 
                       data-line-ref={`line-${index + 1}`}
@@ -211,7 +231,7 @@ export default async function InvoicePage({ params }: Props) {
         )}
 
         {/* Analysis Summary Section */}
-        {invoice.result.summary && (
+        {finalInvoice.result.summary && (
           <Section title="Analysis Summary">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div className={`p-4 rounded-lg border ${
@@ -227,7 +247,7 @@ export default async function InvoicePage({ params }: Props) {
                 <div className={`text-lg font-semibold ${
                   isStyleFoundation ? 'text-text-1' : 'text-white'
                 }`} data-testid="invoice-total">
-                  ${invoice.total?.toFixed(2) ?? 'N/A'}
+                  ${finalInvoice.total?.toFixed(2) ?? 'N/A'}
                 </div>
               </div>
               <div className={`p-4 rounded-lg border ${
@@ -243,7 +263,7 @@ export default async function InvoicePage({ params }: Props) {
                 <div className={`text-lg font-semibold ${
                   isStyleFoundation ? 'text-text-1' : 'text-white'
                 }`}>
-                  ${invoice.result.invoice_lines?.reduce((sum, line) => sum + (line.amount || 0), 0).toFixed(2) ?? 'N/A'}
+                  ${finalInvoice.result.invoice_lines?.reduce((sum, line) => sum + (line.amount || 0), 0).toFixed(2) ?? 'N/A'}
                 </div>
               </div>
               <div className={`p-4 rounded-lg border ${
@@ -264,71 +284,68 @@ export default async function InvoicePage({ params }: Props) {
                 </div>
               </div>
             </div>
+
+            {/* Contract vs Invoice Mini-Table */}
+            {contractTotal && contractTotal > 0 && (
+              <div className={`p-4 rounded-lg border mb-6 ${
+                isStyleFoundation 
+                  ? 'bg-white/5 border-white/10' 
+                  : 'bg-zinc-800 border-zinc-700'
+              }`}>
+                <h3 className={`text-lg font-semibold mb-3 ${
+                  isStyleFoundation ? 'text-text-1' : 'text-white'
+                }`}>
+                  Contract vs Invoice Comparison
+                </h3>
+                <table className="w-full">
+                  <tbody>
+                    <tr className={`border-b ${isStyleFoundation ? 'border-white/10' : 'border-gray-600'}`}>
+                      <td className={`py-2 ${isStyleFoundation ? 'text-text-2' : 'text-gray-300'}`}>
+                        Contract (expected)
+                      </td>
+                      <td className={`py-2 text-right font-semibold ${
+                        isStyleFoundation ? 'text-text-1' : 'text-white'
+                      }`}>
+                        ${contractTotal.toFixed(2)}
+                      </td>
+                    </tr>
+                    <tr className={`border-b ${isStyleFoundation ? 'border-white/10' : 'border-gray-600'}`}>
+                      <td className={`py-2 ${isStyleFoundation ? 'text-text-2' : 'text-gray-300'}`}>
+                        Invoice (actual)
+                      </td>
+                      <td className={`py-2 text-right font-semibold ${
+                        isStyleFoundation ? 'text-text-1' : 'text-white'
+                      }`}>
+                        ${finalInvoice.total?.toFixed(2) ?? '0.00'}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className={`py-2 font-semibold ${isStyleFoundation ? 'text-text-1' : 'text-white'}`}>
+                        Overbilling
+                      </td>
+                      <td className={`py-2 text-right font-bold ${
+                        (finalInvoice.total || 0) > contractTotal ? 'text-red-400' : 'text-green-400'
+                      }`}>
+                        ${Math.max((finalInvoice.total || 0) - contractTotal, 0).toFixed(2)}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
+
             <p className={`leading-relaxed ${
               isStyleFoundation ? 'text-text-2' : 'text-gray-300'
             }`}>
-              {invoice.result.summary}
+              {finalInvoice.result.summary}
             </p>
           </Section>
         )}
 
-        {/* Details Section - Moved to bottom */}
-        <Section title="Details">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Invoice Info */}
-            <KeyValueCard
-              title="Invoice Info"
-              items={[
-                { label: 'Invoice ID', value: invoice.id },
-                { label: 'Total Amount', value: `$${invoice.total?.toFixed(2) ?? 'N/A'}` },
-                { label: 'Period', value: invoice.period || 'N/A' },
-                { label: 'Number', value: invoice.number || 'N/A' },
-                { label: 'Upload Date', value: new Date(invoice.createdAt).toLocaleDateString() }
-              ]}
-            />
-
-            {/* Vendor Match */}
-            <KeyValueCard
-              title="Vendor Match"
-              items={[
-                { 
-                  label: 'Vendor', 
-                  value: vendor ? (
-                    <Link 
-                      href={`/vendors/${vendor.id}`}
-                      className={`hover:underline ${
-                        isStyleFoundation ? 'text-accent-400' : 'text-blue-400'
-                      }`}
-                    >
-                      {vendor.primary_name}
-                    </Link>
-                  ) : 'Unmatched'
-                },
-                { 
-                  label: 'Match Status', 
-                  value: getVendorMatchBadge(
-                    vendor ? 'Matched' : 'Unmatched',
-                    invoice.result.match?.score || 0
-                  )
-                },
-                { label: 'Confidence Score', value: `${Math.round((invoice.result.match?.score || 0) * 100)}%` }
-              ]}
-            />
-
-            {/* File Info */}
-            <KeyValueCard
-              title="File Info"
-              items={[
-                { label: 'Filename', value: invoice.fileName || 'Unknown' },
-                { label: 'File Hash', value: invoice.fileHash?.slice(0, 12) + '...' || 'N/A' },
-                { label: 'Text Hash', value: invoice.textHash?.slice(0, 12) + '...' || 'N/A' },
-                { label: 'Processing', value: 'Complete' }
-              ]}
-            />
           </div>
-        </Section>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
