@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { listInvoicesByVendor, getVendor } from '@/server/store';
+import { listInvoicesByVendor } from '@/server/invoiceStore';
+import { getVendor } from '@/server/store';
 import type { UUID } from '@/types/domain';
 
 export async function GET(
